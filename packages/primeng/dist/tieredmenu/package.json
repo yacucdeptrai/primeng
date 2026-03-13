@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-tieredmenu.mjs",
+  "typings": "../types/primeng-tieredmenu.d.ts"
+}

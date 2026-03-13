@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-divider.mjs",
+  "typings": "../types/primeng-divider.d.ts"
+}

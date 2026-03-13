@@ -1,0 +1,37 @@
+import * as i0 from '@angular/core';
+import { AfterViewInit, OnDestroy, EventEmitter, TemplateRef, EmbeddedViewRef, ViewContainerRef } from '@angular/core';
+import { BaseComponent } from 'primeng/basecomponent';
+import { Nullable } from 'primeng/ts-helpers';
+
+/**
+ * Defer postpones the loading the content that is initially not in the viewport until it becomes visible on scroll.
+ * @deprecated use Angular defer block instead.
+ * @group Components
+ */
+declare class Defer extends BaseComponent implements AfterViewInit, OnDestroy {
+    /**
+     * Callback to invoke when deferred content is loaded.
+     * @param {Event} event - Browser event.
+     * @group Emits
+     */
+    onLoad: EventEmitter<Event>;
+    template: TemplateRef<any> | undefined;
+    documentScrollListener: Nullable<Function>;
+    view: Nullable<EmbeddedViewRef<any>>;
+    viewContainer: ViewContainerRef;
+    ngOnInit(): void;
+    ngAfterViewInit(): void;
+    shouldLoad(): boolean;
+    load(): void;
+    isLoaded(): boolean;
+    ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Defer, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<Defer, "[pDefer]", never, {}, { "onLoad": "onLoad"; }, ["template"], never, true, never>;
+}
+declare class DeferModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<DeferModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<DeferModule, never, [typeof Defer], [typeof Defer]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<DeferModule>;
+}
+
+export { Defer, DeferModule };

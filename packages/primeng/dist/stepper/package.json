@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-stepper.mjs",
+  "typings": "../types/primeng-stepper.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-scrollpanel.mjs",
+  "typings": "../types/primeng-scrollpanel.d.ts"
+}

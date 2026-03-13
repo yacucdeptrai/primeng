@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-chip.mjs",
+  "typings": "../types/primeng-chip.d.ts"
+}

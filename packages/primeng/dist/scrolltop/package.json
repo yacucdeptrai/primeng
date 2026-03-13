@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-scrolltop.mjs",
+  "typings": "../types/primeng-scrolltop.d.ts"
+}

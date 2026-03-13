@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-treetable.mjs",
+  "typings": "../types/primeng-treetable.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-popover.mjs",
+  "typings": "../types/primeng-popover.d.ts"
+}

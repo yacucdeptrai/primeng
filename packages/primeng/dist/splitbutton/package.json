@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-splitbutton.mjs",
+  "typings": "../types/primeng-splitbutton.d.ts"
+}

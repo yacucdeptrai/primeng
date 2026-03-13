@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-badge.mjs",
+  "typings": "../types/primeng-badge.d.ts"
+}

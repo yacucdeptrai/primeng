@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-keyfilter.mjs",
+  "typings": "../types/primeng-keyfilter.d.ts"
+}

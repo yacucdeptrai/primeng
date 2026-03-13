@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-inputgroup.mjs",
+  "typings": "../types/primeng-inputgroup.d.ts"
+}

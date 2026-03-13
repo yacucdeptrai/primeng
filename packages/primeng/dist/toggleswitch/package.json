@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-toggleswitch.mjs",
+  "typings": "../types/primeng-toggleswitch.d.ts"
+}

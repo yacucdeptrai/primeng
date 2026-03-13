@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-progressspinner.mjs",
+  "typings": "../types/primeng-progressspinner.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-orderlist.mjs",
+  "typings": "../types/primeng-orderlist.d.ts"
+}

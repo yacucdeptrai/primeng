@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-speeddial.mjs",
+  "typings": "../types/primeng-speeddial.d.ts"
+}

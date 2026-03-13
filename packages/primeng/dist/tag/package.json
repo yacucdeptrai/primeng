@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-tag.mjs",
+  "typings": "../types/primeng-tag.d.ts"
+}

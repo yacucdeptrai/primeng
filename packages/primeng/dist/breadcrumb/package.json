@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-breadcrumb.mjs",
+  "typings": "../types/primeng-breadcrumb.d.ts"
+}

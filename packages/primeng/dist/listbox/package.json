@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-listbox.mjs",
+  "typings": "../types/primeng-listbox.d.ts"
+}

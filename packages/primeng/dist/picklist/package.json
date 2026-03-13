@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-picklist.mjs",
+  "typings": "../types/primeng-picklist.d.ts"
+}

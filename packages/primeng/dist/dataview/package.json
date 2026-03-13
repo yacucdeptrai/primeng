@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-dataview.mjs",
+  "typings": "../types/primeng-dataview.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-knob.mjs",
+  "typings": "../types/primeng-knob.d.ts"
+}

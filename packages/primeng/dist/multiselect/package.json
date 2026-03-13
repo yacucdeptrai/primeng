@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-multiselect.mjs",
+  "typings": "../types/primeng-multiselect.d.ts"
+}

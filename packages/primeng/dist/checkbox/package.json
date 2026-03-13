@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-checkbox.mjs",
+  "typings": "../types/primeng-checkbox.d.ts"
+}

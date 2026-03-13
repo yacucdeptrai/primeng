@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-metergroup.mjs",
+  "typings": "../types/primeng-metergroup.d.ts"
+}

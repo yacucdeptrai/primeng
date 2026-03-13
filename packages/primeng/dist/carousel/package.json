@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-carousel.mjs",
+  "typings": "../types/primeng-carousel.d.ts"
+}

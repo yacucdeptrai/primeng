@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-progressbar.mjs",
+  "typings": "../types/primeng-progressbar.d.ts"
+}

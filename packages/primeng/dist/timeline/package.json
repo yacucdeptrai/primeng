@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-timeline.mjs",
+  "typings": "../types/primeng-timeline.d.ts"
+}

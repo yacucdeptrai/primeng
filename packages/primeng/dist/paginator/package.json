@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-paginator.mjs",
+  "typings": "../types/primeng-paginator.d.ts"
+}

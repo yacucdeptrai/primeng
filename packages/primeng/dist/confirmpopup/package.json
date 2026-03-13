@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-confirmpopup.mjs",
+  "typings": "../types/primeng-confirmpopup.d.ts"
+}

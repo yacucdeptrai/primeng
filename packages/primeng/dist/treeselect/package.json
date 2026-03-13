@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-treeselect.mjs",
+  "typings": "../types/primeng-treeselect.d.ts"
+}

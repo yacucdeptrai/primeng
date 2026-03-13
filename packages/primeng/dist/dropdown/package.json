@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-dropdown.mjs",
+  "typings": "../types/primeng-dropdown.d.ts"
+}

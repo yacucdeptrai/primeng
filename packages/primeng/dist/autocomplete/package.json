@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-autocomplete.mjs",
+  "typings": "../types/primeng-autocomplete.d.ts"
+}

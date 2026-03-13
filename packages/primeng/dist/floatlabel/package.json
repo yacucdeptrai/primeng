@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-floatlabel.mjs",
+  "typings": "../types/primeng-floatlabel.d.ts"
+}

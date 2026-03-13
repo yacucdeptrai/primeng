@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-inputicon.mjs",
+  "typings": "../types/primeng-inputicon.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-overlaybadge.mjs",
+  "typings": "../types/primeng-overlaybadge.d.ts"
+}

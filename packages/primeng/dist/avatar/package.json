@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-avatar.mjs",
+  "typings": "../types/primeng-avatar.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-overlay.mjs",
+  "typings": "../types/primeng-overlay.d.ts"
+}

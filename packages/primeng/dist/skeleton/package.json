@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-skeleton.mjs",
+  "typings": "../types/primeng-skeleton.d.ts"
+}

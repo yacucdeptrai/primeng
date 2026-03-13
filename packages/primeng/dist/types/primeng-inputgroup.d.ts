@@ -1,0 +1,66 @@
+import { BaseComponent } from 'primeng/basecomponent';
+import { BaseStyle } from 'primeng/base';
+import * as i0 from '@angular/core';
+import * as i1 from 'primeng/api';
+
+/**
+ *
+ * InputGroup displays text, icon, buttons and other content can be grouped next to an input.
+ *
+ * [Live Demo](https://www.primeng.org/inputgroup/)
+ *
+ * @module inputgroupstyle
+ *
+ */
+declare enum InputGroupClasses {
+    /**
+     * Class name of the root element
+     */
+    root = "p-inputgroup"
+}
+declare class InputGroupStyle extends BaseStyle {
+    name: string;
+    theme: ({ dt }: {
+        dt: any;
+    }) => string;
+    classes: {
+        root: ({ props }: {
+            props: any;
+        }) => (string | {
+            'p-inputgroup-fluid': any;
+        })[];
+    };
+    static ɵfac: i0.ɵɵFactoryDeclaration<InputGroupStyle, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<InputGroupStyle>;
+}
+interface InputGroupStyle extends BaseStyle {
+}
+
+/**
+ * InputGroup displays text, icon, buttons and other content can be grouped next to an input.
+ * @group Components
+ */
+declare class InputGroup extends BaseComponent {
+    /**
+     * Inline style of the element.
+     * @group Props
+     */
+    style: {
+        [klass: string]: any;
+    } | null | undefined;
+    /**
+     * Class of the element.
+     * @group Props
+     */
+    styleClass: string | undefined;
+    _componentStyle: InputGroupStyle;
+    static ɵfac: i0.ɵɵFactoryDeclaration<InputGroup, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<InputGroup, "p-inputgroup, p-inputGroup, p-input-group", never, { "style": { "alias": "style"; "required": false; }; "styleClass": { "alias": "styleClass"; "required": false; }; }, {}, never, ["*"], true, never>;
+}
+declare class InputGroupModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<InputGroupModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<InputGroupModule, never, [typeof InputGroup, typeof i1.SharedModule], [typeof InputGroup, typeof i1.SharedModule]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<InputGroupModule>;
+}
+
+export { InputGroup, InputGroupClasses, InputGroupModule, InputGroupStyle };

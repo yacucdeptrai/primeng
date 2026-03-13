@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-cascadeselect.mjs",
+  "typings": "../types/primeng-cascadeselect.d.ts"
+}

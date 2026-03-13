@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-defer.mjs",
+  "typings": "../types/primeng-defer.d.ts"
+}

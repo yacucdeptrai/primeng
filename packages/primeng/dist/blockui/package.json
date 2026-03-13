@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-blockui.mjs",
+  "typings": "../types/primeng-blockui.d.ts"
+}

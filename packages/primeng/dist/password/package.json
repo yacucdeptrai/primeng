@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-password.mjs",
+  "typings": "../types/primeng-password.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-rating.mjs",
+  "typings": "../types/primeng-rating.d.ts"
+}

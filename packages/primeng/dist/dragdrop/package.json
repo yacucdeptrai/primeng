@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-dragdrop.mjs",
+  "typings": "../types/primeng-dragdrop.d.ts"
+}

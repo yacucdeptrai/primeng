@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-dynamicdialog.mjs",
+  "typings": "../types/primeng-dynamicdialog.d.ts"
+}

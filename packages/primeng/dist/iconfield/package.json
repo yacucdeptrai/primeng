@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-iconfield.mjs",
+  "typings": "../types/primeng-iconfield.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-calendar.mjs",
+  "typings": "../types/primeng-calendar.d.ts"
+}

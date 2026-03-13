@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-textarea.mjs",
+  "typings": "../types/primeng-textarea.d.ts"
+}

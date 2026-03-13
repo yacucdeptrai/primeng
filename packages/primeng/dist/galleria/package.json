@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-galleria.mjs",
+  "typings": "../types/primeng-galleria.d.ts"
+}

@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-base.mjs",
+  "typings": "../types/primeng-base.d.ts"
+}

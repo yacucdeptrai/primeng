@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-organizationchart.mjs",
+  "typings": "../types/primeng-organizationchart.d.ts"
+}

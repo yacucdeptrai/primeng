@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-panelmenu.mjs",
+  "typings": "../types/primeng-panelmenu.d.ts"
+}

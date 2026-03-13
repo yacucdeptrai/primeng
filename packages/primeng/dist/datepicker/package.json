@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-datepicker.mjs",
+  "typings": "../types/primeng-datepicker.d.ts"
+}

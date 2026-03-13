@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-focustrap.mjs",
+  "typings": "../types/primeng-focustrap.d.ts"
+}

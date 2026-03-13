@@ -1,0 +1,4 @@
+{
+  "module": "../fesm2022/primeng-sidebar.mjs",
+  "typings": "../types/primeng-sidebar.d.ts"
+}
