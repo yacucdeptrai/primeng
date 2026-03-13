@@ -3515,7 +3515,7 @@ export class TTEditableColumn implements AfterViewInit {
         let targetCell = this.findPreviousEditableColumn(currentCell);
 
         if (targetCell) {
-            invokeElementMethod(targetCell, 'click', undefined);
+            invokeElementMethod(targetCell, 'click' as any, undefined);
             event.preventDefault();
         }
     }
@@ -3526,7 +3526,7 @@ export class TTEditableColumn implements AfterViewInit {
         let targetCell = this.findNextEditableColumn(currentCell);
 
         if (targetCell) {
-            invokeElementMethod(targetCell, 'click', undefined);
+            invokeElementMethod(targetCell, 'click' as any, undefined);
             event.preventDefault();
         }
     }
@@ -3622,8 +3622,8 @@ export class TreeTableCellEditor extends BaseComponent implements AfterContentIn
         '[attr.tabindex]': "'0'",
         '[attr.aria-expanded]': 'expanded',
         '[attr.aria-level]': 'level',
-        '[attr.data-pc-section]': 'row',
-        '[attr.role]': 'row'
+        '[attr.data-pc-section]': '"row"',
+        '[attr.role]': '"row"'
     }
 })
 export class TTRow {

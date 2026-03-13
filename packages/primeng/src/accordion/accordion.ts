@@ -193,7 +193,7 @@ export class AccordionHeader extends BaseComponent {
         }
     }
 
-    @HostListener('focus', ['$event']) onFocus() {
+    @HostListener('focus') onFocus() {
         this.pcAccordion.selectOnFocus() && this.changeActiveValue();
     }
 

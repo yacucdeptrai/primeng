@@ -52,12 +52,14 @@
                             "rgbcolor"
                         ],
                         "server": "server/main.server.ts",
-                        "prerender": {
-                            "discoverRoutes": false,
-                            "routesFile": "router/routes.txt"
-                        },
+                        "prerender": false,
                         "ssr": {
                             "entry": "server/server.ts"
+                        },
+                        "optimization": {
+                            "fonts": {
+                                "inline": false
+                            }
                         }
                     },
                     "configurations": {

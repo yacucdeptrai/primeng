@@ -409,7 +409,7 @@ export class Drawer extends BaseComponent implements AfterViewInit, AfterContent
 
             this.renderer.appendChild(this.document.body, this.mask);
             if (this.blockScroll) {
-                blockBodyScroll();
+                blockBodyScroll(undefined);
             }
         }
     }
@@ -429,7 +429,7 @@ export class Drawer extends BaseComponent implements AfterViewInit, AfterContent
         }
 
         if (this.blockScroll) {
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
 
         this.unbindAnimationEndListener();

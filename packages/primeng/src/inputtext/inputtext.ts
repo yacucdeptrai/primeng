@@ -66,7 +66,7 @@ export class InputText extends BaseComponent implements DoCheck, AfterViewInit {
         this.updateFilledState();
     }
 
-    @HostListener('input', ['$event'])
+    @HostListener('input')
     onInput() {
         this.updateFilledState();
     }

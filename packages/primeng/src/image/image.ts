@@ -374,7 +374,7 @@ export class Image extends BaseComponent implements AfterContentInit {
         if (this.preview) {
             this.maskVisible = true;
             this.previewVisible = true;
-            blockBodyScroll();
+            blockBodyScroll(undefined);
         }
     }
 
@@ -495,7 +495,7 @@ export class Image extends BaseComponent implements AfterContentInit {
         this.previewVisible = false;
         this.rotate = 0;
         this.scale = this.zoomSettings.default;
-        unblockBodyScroll();
+        unblockBodyScroll(undefined);
     }
 
     imageError(event: Event) {

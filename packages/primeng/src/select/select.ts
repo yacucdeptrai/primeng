@@ -1584,7 +1584,7 @@ export class Select extends BaseComponent implements OnInit, AfterViewInit, Afte
         this.searchValue = '';
 
         if (this.overlayOptions?.mode === 'modal') {
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
         if (this.filter && this.resetFilterOnHide) {
             this.resetFilter();

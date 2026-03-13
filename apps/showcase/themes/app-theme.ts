@@ -47,7 +47,7 @@ const Noir = definePreset(Aura, {
             }
         }
     }
-});
+} as any);
 
 export default {
     preset: Noir,

@@ -1435,7 +1435,7 @@ export class Dropdown extends BaseComponent implements OnInit, AfterViewInit, Af
         this.searchValue = '';
 
         if (this.overlayOptions?.mode === 'modal') {
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
         if (this.filter && this.resetFilterOnHide) {
             this.resetFilter();

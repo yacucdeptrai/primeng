@@ -17,7 +17,7 @@ import { TerminalService } from './terminalservice';
     standalone: true,
     imports: [CommonModule, FormsModule, SharedModule],
     template: `
-        <div [ngClass]="'p-terminal p-component'" [ngStyle]="style" [class]="styleClass" (click)="focus(in)">
+        <div [ngClass]="'p-terminal p-component'" [ngStyle]="style" [class]="styleClass" (click)="focus(inpc)">
             <div class="p-terminal-welcome-message" *ngIf="welcomeMessage">{{ welcomeMessage }}</div>
             <div class="p-terminal-command-list">
                 <div class="p-terminal-command" *ngFor="let command of commands">
@@ -28,7 +28,7 @@ import { TerminalService } from './terminalservice';
             </div>
             <div class="p-terminal-prompt">
                 <span class="p-terminal-prompt-label">{{ prompt }}</span>
-                <input #in type="text" [(ngModel)]="command" class="p-terminal-prompt-value" autocomplete="off" (keydown)="handleCommand($event)" autofocus />
+                <input #inpc type="text" [(ngModel)]="command" class="p-terminal-prompt-value" autocomplete="off" (keydown)="handleCommand($event)" autofocus />
             </div>
         </div>
     `,

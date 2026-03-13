@@ -2112,7 +2112,7 @@ export class MultiSelect extends BaseComponent implements OnInit, AfterViewInit,
             this.resetFilter();
         }
         if (this.overlayOptions?.mode === 'modal') {
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
 
         isFocus && focus(this.focusInputViewChild?.nativeElement);

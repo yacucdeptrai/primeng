@@ -3286,7 +3286,7 @@ export class DatePicker extends BaseComponent implements OnInit, AfterContentIni
                 this.overlayVisible = false;
             });
             this.renderer.appendChild(this.document.body, this.mask);
-            blockBodyScroll();
+            blockBodyScroll(undefined);
         }
     }
 
@@ -3315,7 +3315,7 @@ export class DatePicker extends BaseComponent implements OnInit, AfterContentIni
         }
 
         if (!hasBlockerMasks) {
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
 
         this.unbindAnimationEndListener();

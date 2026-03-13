@@ -93,6 +93,6 @@ export class DesignCSCommon {
     @Input() colorScheme: any;
 
     onSurfaceColorChange(event: any) {
-        this.colorScheme.surface = { ...{ 0: '#ffffff' }, ...palette(event.target.value) };
+        this.colorScheme.surface = Object.assign({ 0: '#ffffff' }, palette(event.target.value));
     }
 }

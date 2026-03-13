@@ -366,7 +366,7 @@ export class Sidebar extends BaseComponent implements AfterViewInit, AfterConten
         }
 
         if (this.blockScroll) {
-            blockBodyScroll();
+            blockBodyScroll(undefined);
         }
     }
 

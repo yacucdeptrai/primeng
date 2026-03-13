@@ -46,7 +46,7 @@ export class BaseComponent {
 
     attrSelector = uuid('pc');
 
-    private themeChangeListeners: Function[] = [];
+    private themeChangeListeners: any[] = [];
 
     _getHostInstance(instance) {
         if (instance) {

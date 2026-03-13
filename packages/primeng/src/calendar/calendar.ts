@@ -3259,7 +3259,7 @@ export class Calendar extends BaseComponent implements OnInit, AfterContentInit,
                 this.overlayVisible = false;
             });
             this.renderer.appendChild(this.document.body, this.mask);
-            blockBodyScroll();
+            blockBodyScroll(undefined);
         }
     }
 
@@ -3288,7 +3288,7 @@ export class Calendar extends BaseComponent implements OnInit, AfterContentInit,
         }
 
         if (!hasBlockerMasks) {
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
 
         this.unbindAnimationEndListener();

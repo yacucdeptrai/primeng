@@ -141,7 +141,7 @@ export class BlockUI extends BaseComponent implements AfterViewInit, AfterConten
                 this.target.getBlockableElement().style.position = 'relative';
             } else {
                 this.renderer.appendChild(this.document.body, (this.mask as ElementRef).nativeElement);
-                blockBodyScroll();
+                blockBodyScroll(undefined);
             }
 
             if (this.autoZIndex) {
@@ -165,7 +165,7 @@ export class BlockUI extends BaseComponent implements AfterViewInit, AfterConten
             ZIndexUtils.clear(this.mask.nativeElement);
             // removeClass(this.mask.nativeElement, 'p-overlay-mask-leave');
             this.renderer.removeChild(this.el.nativeElement, this.mask.nativeElement);
-            unblockBodyScroll();
+            unblockBodyScroll(undefined);
         }
         this.unbindAnimationEndListener();
         this.cd.markForCheck();

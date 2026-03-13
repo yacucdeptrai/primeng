@@ -716,7 +716,7 @@ export class Dialog extends BaseComponent implements OnInit, AfterContentInit, O
         }
 
         if (this.modal) {
-            blockBodyScroll();
+            blockBodyScroll(undefined);
         }
     }
 
@@ -730,7 +730,7 @@ export class Dialog extends BaseComponent implements OnInit, AfterContentInit, O
             const scrollBlockers = document.querySelectorAll('.p-dialog-mask-scrollblocker');
 
             if (this.modal && scrollBlockers && scrollBlockers.length == 1) {
-                unblockBodyScroll();
+                unblockBodyScroll(undefined);
             }
 
             if (!(this.cd as ViewRef).destroyed) {
@@ -744,9 +744,9 @@ export class Dialog extends BaseComponent implements OnInit, AfterContentInit, O
 
         if (!this.modal && !this.blockScroll) {
             if (this.maximized) {
-                blockBodyScroll();
+                blockBodyScroll(undefined);
             } else {
-                unblockBodyScroll();
+                unblockBodyScroll(undefined);
             }
         }
 

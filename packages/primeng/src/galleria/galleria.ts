@@ -402,7 +402,7 @@ export class Galleria extends BaseComponent implements OnChanges, OnDestroy {
     }
 
     enableModality() {
-        blockBodyScroll();
+        blockBodyScroll(undefined);
         this.cd.markForCheck();
 
         if (this.mask) {
@@ -411,7 +411,7 @@ export class Galleria extends BaseComponent implements OnChanges, OnDestroy {
     }
 
     disableModality() {
-        unblockBodyScroll();
+        unblockBodyScroll(undefined);
         this.maskVisible = false;
         this.cd.markForCheck();
 
