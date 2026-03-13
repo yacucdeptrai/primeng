@@ -37,8 +37,8 @@
     "rxjs": "^6.0.0 || ^7.8.1"
   },
   "dependencies": {
-    "@primeuix/styled": "catalog:",
-    "@primeuix/utils": "catalog:",
+    "@primeuix/styled": "^0.7.4",
+    "@primeuix/utils": "^0.7.0",
     "tslib": "^2.3.0"
   },
   "module": "fesm2022/primeng.mjs",
