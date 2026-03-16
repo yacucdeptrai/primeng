@@ -104,6 +104,7 @@ export class RadioControlRegistry {
         <div [class]="cx('box')" [pBind]="ptm('box')">
             <div [class]="cx('icon')" [pBind]="ptm('icon')"></div>
         </div>
+        <i *ngIf="icon" class="tw-cursor-pointer" style="cursor: pointer" [class]="icon" [ngClass]="{ 'p-disabled': $disabled() }" (click)="select($event)"></i>
     `,
     providers: [RADIO_VALUE_ACCESSOR, RadioButtonStyle, { provide: RADIOBUTTON_INSTANCE, useExisting: RadioButton }, { provide: PARENT_INSTANCE, useExisting: RadioButton }],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -157,6 +158,11 @@ export class RadioButton extends BaseEditableHolder<RadioButtonPassThrough> {
      * @group Props
      */
     @Input() styleClass: string | undefined;
+    /**
+     * Custom external icon class.
+     * @group Props
+     */
+    @Input() icon?: string;
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props

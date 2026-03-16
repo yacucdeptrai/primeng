@@ -210,8 +210,16 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
 
     checked: boolean = false;
 
+    /**
+     * Initial value of the toggle button.
+     * @group Props
+     */
+    @Input() initValue: boolean | undefined;
+
     onInit() {
-        if (this.checked === null || this.checked === undefined) {
+        if (this.initValue !== undefined) {
+            this.checked = this.initValue;
+        } else if (this.checked === null || this.checked === undefined) {
             this.checked = false;
         }
     }

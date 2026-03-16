@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, Type, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
+import { filter, Subscription, SubscriptionLike } from 'rxjs';
 import { uuid } from '@primeuix/utils';
 import { SharedModule, TranslationKeys } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -37,11 +39,11 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
             [baseZIndex]="ddconfig?.baseZIndex || 0"
             [minX]="minX"
             [minY]="minY"
-            [focusOnShow]="ddconfig?.focusOnShow !== false"
+            [focusOnShow]="ddconfig?.focusOnShow === true"
             [maximizable]="maximizable"
             [keepInViewport]="keepInViewport"
             [focusTrap]="ddconfig?.focusTrap !== false"
-            [transitionOptions]="ddconfig?.transitionOptions || '150ms cubic-bezier(0, 0, 0.2, 1)'"
+            [transitionOptions]="ddconfig?.disableAnimation ? '0ms' : ddconfig?.transitionOptions || '150ms cubic-bezier(0, 0, 0.2, 1)'"
             [closeAriaLabel]="ddconfig?.closeAriaLabel || defaultCloseAriaLabel"
             [minimizeIcon]="minimizeIcon"
             [maximizeIcon]="maximizeIcon"
@@ -96,6 +98,10 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     $pcDynamicDialog: DynamicDialog | undefined = inject(DYNAMIC_DIALOG_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
+
+    router = inject(Router, { optional: true });
+
+    _locationChanges: SubscriptionLike = Subscription.EMPTY;
 
     onAfterViewChecked(): void {
         this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
@@ -255,6 +261,11 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     onAfterViewInit() {
         this.loadChildComponent(this.childComponentType!);
         this.ariaLabelledBy = this.getAriaLabelledBy();
+
+        if (this.ddconfig.closeOnNavigation && this.router) {
+            this._locationChanges = this.router.events.pipe(filter((event) => event instanceof NavigationStart)).subscribe(() => this.close());
+        }
+
         this.cd.detectChanges();
     }
 
@@ -568,6 +579,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
             this.componentRef.destroy();
         }
         this.destroyStyle();
+        this._locationChanges.unsubscribe();
     }
 }
 

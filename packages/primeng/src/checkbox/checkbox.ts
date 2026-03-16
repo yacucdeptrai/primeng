@@ -81,6 +81,7 @@ export const CHECKBOX_VALUE_ACCESSOR: any = {
             </ng-container>
             <ng-template *ngTemplateOutlet="checkboxIconTemplate || _checkboxIconTemplate; context: { checked: checked, class: cx('icon'), dataP: dataP }"></ng-template>
         </div>
+        <i *ngIf="icon" class="tw-cursor-pointer" style="cursor: pointer" [class]="icon" [ngClass]="{ 'p-disabled': $disabled() }" (click)="handleChange($event)"></i>
     `,
     providers: [CHECKBOX_VALUE_ACCESSOR, CheckboxStyle, { provide: CHECKBOX_INSTANCE, useExisting: Checkbox }, { provide: PARENT_INSTANCE, useExisting: Checkbox }],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -159,6 +160,11 @@ export class Checkbox extends BaseEditableHolder<CheckboxPassThrough> {
      * @group Props
      */
     @Input() checkboxIcon: string | undefined;
+    /**
+     * Custom external icon class.
+     * @group Props
+     */
+    @Input() icon?: string;
     /**
      * When present, it specifies that the component cannot be edited.
      * @group Props

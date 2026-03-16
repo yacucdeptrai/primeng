@@ -1299,10 +1299,16 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         const max = this.max();
 
         if (min != null && (value as number) < min) {
-            return this.min();
+            if (max != null) {
+                return max;
+            }
+            return min;
         }
 
         if (max != null && (value as number) > max) {
+            if (min != null) {
+                return min;
+            }
             return max;
         }
 

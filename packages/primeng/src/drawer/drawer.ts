@@ -34,6 +34,8 @@ import { Nullable, VoidListener } from 'primeng/ts-helpers';
 import { DrawerPassThrough } from 'primeng/types/drawer';
 import { ZIndexUtils } from 'primeng/utils';
 import { DrawerStyle } from './style/drawerstyle';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, Subscription, SubscriptionLike } from 'rxjs';
 
 const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
 
@@ -91,7 +93,7 @@ const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
                         </p-button>
                     </div>
 
-                    <div [pBind]="ptm('content')" [ngClass]="cx('content')" [attr.data-pc-section]="'content'">
+                    <div [pBind]="ptm('content')" [class]="contentStyleClass" [id]="contentId" [ngClass]="cx('content')" [attr.data-pc-section]="'content'">
                         <ng-content></ng-content>
                         <ng-container *ngTemplateOutlet="contentTemplate || _contentTemplate"></ng-container>
                     </div>
@@ -114,6 +116,8 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
     $pcDrawer: Drawer | undefined = inject(DRAWER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
+
+    router = inject(Router, { optional: true });
 
     onAfterViewChecked(): void {
         this.bindDirectiveInstance.setAttrs(this.ptm('host'));
@@ -192,6 +196,22 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
      * @group Props
      */
     @Input({ transform: booleanAttribute }) closeOnEscape: boolean = true;
+    /**
+     * Specifies if the drawer should close when the user goes backwards/forwards in history.
+     * Note that this usually doesn't include clicking on links (unless the user is using the HashLocationStrategy).
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) closeOnNavigation: boolean = false;
+    /**
+     * Style class of the content element.
+     * @group Props
+     */
+    @Input() contentStyleClass: string | undefined;
+    /**
+     * ID of the content element.
+     * @group Props
+     */
+    @Input() contentId: string | undefined;
     /**
      * Transition options of the animation.
      * @group Props
@@ -275,6 +295,8 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
     _position: string = 'left';
 
     _fullScreen: boolean = false;
+
+    _locationChanges: SubscriptionLike = Subscription.EMPTY;
 
     modalVisible: boolean = false;
 
@@ -376,6 +398,13 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
             this.enableModality();
         }
 
+        if (this.closeOnNavigation && this.router) {
+            this._locationChanges = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+                this.hide();
+                this.visibleChange.emit(false);
+            });
+        }
+
         this.onShow.emit({});
         this.visibleChange.emit(true);
     }
@@ -388,6 +417,8 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
         if (this.modal) {
             this.disableModality();
         }
+
+        this._locationChanges.unsubscribe();
     }
 
     close(event: Event) {

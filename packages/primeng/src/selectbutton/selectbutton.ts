@@ -71,7 +71,7 @@ export const SELECTBUTTON_VALUE_ACCESSOR: any = {
     `,
     providers: [SELECTBUTTON_VALUE_ACCESSOR, SelectButtonStyle, { provide: SELECTBUTTON_INSTANCE, useExisting: SelectButton }, { provide: PARENT_INSTANCE, useExisting: SelectButton }],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.Emulated,
     host: {
         '[class]': "cx('root')",
         '[attr.role]': '"group"',
@@ -147,6 +147,13 @@ export class SelectButton extends BaseEditableHolder<SelectButtonPassThrough> im
      * @group Props
      */
     @Input() dataKey: string | undefined;
+    /**
+     * Initial value of the component.
+     * @group Props
+     */
+    @Input() set initValue(value: any) {
+        this.value = value;
+    }
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props

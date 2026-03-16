@@ -630,6 +630,10 @@ export class DomHandler {
         element && document.activeElement !== element && element.focus(options);
     }
 
+    public static blur(element: Element): void {
+        element instanceof HTMLElement && document.activeElement === element && element.blur();
+    }
+
     public static getFocusableSelectorString(selector = ''): string {
         return `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},
         [href][clientHeight][clientWidth]:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector},

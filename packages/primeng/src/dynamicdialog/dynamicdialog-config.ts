@@ -50,7 +50,7 @@ export class DynamicDialogConfig<DataType = any, InputValuesType extends Record<
      * Specifies if autofocus should happen on show.
      * @group Props
      */
-    focusOnShow?: boolean = true;
+    focusOnShow?: boolean = false;
     /**
      * When enabled, can only focus on elements inside the dialog.
      * @group Props
@@ -196,6 +196,17 @@ export class DynamicDialogConfig<DataType = any, InputValuesType extends Record<
      * @group Props
      */
     unstyled?: boolean;
+    /**
+     * Specifies if the dialog should close when the user goes backwards/forwards in history.
+     * Note that this usually doesn't include clicking on links (unless the user is using the HashLocationStrategy).
+     * @group Props
+     */
+    closeOnNavigation?: boolean;
+    /**
+     * Disable show and hide animations
+     * @group Props
+     */
+    disableAnimation?: boolean;
 }
 
 /**

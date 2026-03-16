@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, booleanAttribute, ChangeDetectionStrategy, Component, ContentChild, ContentChildren, inject, InjectionToken, Input, NgModule, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { PrimeTemplate, SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
@@ -31,7 +32,9 @@ const TAG_INSTANCE = new InjectionToken<Tag>('TAG_INSTANCE');
     providers: [TagStyle, { provide: TAG_INSTANCE, useExisting: Tag }, { provide: PARENT_INSTANCE, useExisting: Tag }],
     host: {
         '[class]': "cn(cx('root'), styleClass)",
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP',
+        '[style.cursor]': "link ? 'pointer' : null",
+        '(click)': 'onClick($event)'
     },
     hostDirectives: [Bind]
 })
@@ -40,6 +43,13 @@ export class Tag extends BaseComponent<TagPassThrough> implements AfterContentIn
     $pcTag: Tag | undefined = inject(TAG_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
+    private router = inject(Router, { optional: true });
+
+    onClick(event: Event) {
+        if (this.link && this.router) {
+            this.router.navigateByUrl(this.link);
+        }
+    }
 
     onAfterViewChecked(): void {
         this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
@@ -71,6 +81,11 @@ export class Tag extends BaseComponent<TagPassThrough> implements AfterContentIn
      * @group Props
      */
     @Input({ transform: booleanAttribute }) rounded: boolean | undefined;
+    /**
+     * Link of the tag to navigate to.
+     * @group Props
+     */
+    @Input() link: any;
 
     /**
      * Custom icon template.

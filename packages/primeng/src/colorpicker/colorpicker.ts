@@ -78,6 +78,7 @@ const COLORPICKER_INSTANCE = new InjectionToken<ColorPicker>('COLORPICKER_INSTAN
                         <div #hue [class]="cx('hue')" (mousedown)="onHueMousedown($event)" (touchstart)="onHueDragStart($event)" (touchmove)="onDrag($event)" (touchend)="onDragEnd()" [pBind]="ptm('hue')">
                             <div #hueHandle [class]="cx('hueHandle')" [pBind]="ptm('hueHandle')"></div>
                         </div>
+                        <input #inputValue type="text" [class]="cx('inputValue')" style="width: 100%; margin-top: 0.5rem;" (input)="onInputValueChange($event)" [attr.disabled]="$disabled() ? '' : undefined" [pBind]="ptm('inputValue')" />
                     </div>
                 </div>
             </ng-template>
@@ -155,6 +156,20 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
      */
     @Input() defaultColor: string | undefined = 'ff0000';
     /**
+     * Initializes the default color dynamically from hex.
+     * @group Props
+     */
+    @Input() set initColor(color: string) {
+        if (color) {
+            this.defaultColor = color.substring(color.indexOf('#') + 1);
+            this.value = this.HEXtoHSB(this.defaultColor);
+            this.inputBgColor = '#' + this.defaultColor;
+            this.updateColorSelector();
+            this.updateUI();
+            this.cd.markForCheck();
+        }
+    }
+    /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
      * @group Props
@@ -223,6 +238,12 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
 
     hueHandleViewChild: Nullable<ElementRef>;
 
+    inputValueViewChild: Nullable<ElementRef>;
+
+    containerSize: number = 180;
+
+    inputValueRegex: RegExp = /^#[0-9a-f]{3,6}$/i;
+
     _componentStyle = inject(ColorPickerStyle);
 
     constructor(public overlayService: OverlayService) {
@@ -243,6 +264,12 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
 
     @ViewChild('hueHandle') set hueHandle(element: ElementRef) {
         this.hueHandleViewChild = element;
+    }
+
+    @ViewChild('inputValue') set inputValue(element: ElementRef) {
+        if (element) {
+            this.inputValueViewChild = element;
+        }
     }
 
     get ariaLabel() {
@@ -284,7 +311,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         let pageY = position ? position.pageY : (event as MouseEvent).pageY;
         let top: number = this.hueViewChild?.nativeElement.getBoundingClientRect().top + ((this.document as any).defaultView.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0);
         this.value = this.validateHSB({
-            h: Math.floor((360 * (150 - Math.max(0, Math.min(150, pageY - top)))) / 150),
+            h: Math.floor((360 * (this.containerSize - Math.max(0, Math.min(this.containerSize, pageY - top)))) / this.containerSize),
             s: this.value.s,
             b: this.value.b
         });
@@ -333,8 +360,8 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         let rect = this.colorSelectorViewChild?.nativeElement.getBoundingClientRect();
         let top = rect.top + ((this.document as any).defaultView.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0);
         let left = rect.left + this.document.body.scrollLeft;
-        let saturation = Math.floor((100 * Math.max(0, Math.min(150, pageX - left))) / 150);
-        let brightness = Math.floor((100 * (150 - Math.max(0, Math.min(150, pageY - top)))) / 150);
+        let saturation = Math.floor((100 * Math.max(0, Math.min(this.containerSize, pageX - left))) / this.containerSize);
+        let brightness = Math.floor((100 * (this.containerSize - Math.max(0, Math.min(this.containerSize, pageY - top)))) / this.containerSize);
         this.value = this.validateHSB({
             h: this.value.h,
             s: saturation,
@@ -381,14 +408,33 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         }
     }
 
-    updateUI() {
+    updateUI(updateInputValue: boolean = true) {
         if (this.colorHandleViewChild && this.hueHandleViewChild?.nativeElement) {
-            this.colorHandleViewChild.nativeElement.style.left = Math.floor((150 * this.value.s) / 100) + 'px';
-            this.colorHandleViewChild.nativeElement.style.top = Math.floor((150 * (100 - this.value.b)) / 100) + 'px';
-            this.hueHandleViewChild.nativeElement.style.top = Math.floor(150 - (150 * this.value.h) / 360) + 'px';
+            this.colorHandleViewChild.nativeElement.style.left = Math.floor((this.containerSize * this.value.s) / 100) + 'px';
+            this.colorHandleViewChild.nativeElement.style.top = Math.floor((this.containerSize * (100 - this.value.b)) / 100) + 'px';
+            this.hueHandleViewChild.nativeElement.style.top = Math.floor(this.containerSize - (this.containerSize * this.value.h) / 360) + 'px';
         }
 
-        this.inputBgColor = '#' + this.HSBtoHEX(this.value);
+        const hexColor = '#' + this.HSBtoHEX(this.value);
+
+        if (updateInputValue && this.inputValueViewChild?.nativeElement) {
+            this.inputValueViewChild.nativeElement.value = hexColor;
+        }
+
+        this.inputBgColor = hexColor;
+    }
+
+    onInputValueChange(event: Event) {
+        const stringValue = (<HTMLInputElement>event.target).value;
+        if (!stringValue) return;
+        if (!this.inputValueRegex.test(stringValue)) return;
+        const hexColor = this.validateHEX(stringValue.substring(1));
+
+        this.value = this.HEXtoHSB(hexColor);
+
+        this.updateUI(false);
+        this.updateModel();
+        this.onChange.emit({ originalEvent: event, value: this.getValueToUpdate() });
     }
 
     onInputFocus() {
@@ -512,9 +558,22 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         };
     }
 
+    validateSameChar(str: string) {
+        const lowerCaseStr = str.toLowerCase();
+        let i = lowerCaseStr.length;
+        while (i--) {
+            if (lowerCaseStr[i] !== lowerCaseStr[0]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     validateHEX(hex: string) {
         var len = 6 - hex.length;
-        if (len > 0) {
+        if (len === 3 && this.validateSameChar(hex)) {
+            hex = hex + hex;
+        } else if (len > 0) {
             var o: any = [];
             for (var i = 0; i < len; i++) {
                 o.push('0');

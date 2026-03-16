@@ -72,6 +72,7 @@ export const TOGGLESWITCH_VALUE_ACCESSOR: any = {
                 }
             </div>
         </div>
+        <label *ngIf="label" [attr.for]="inputId" class="p-toggleswitch-label" [class]="labelStyleClass" [ngClass]="{ 'p-highlight': checked(), 'p-disabled': $disabled(), 'p-focus': focused }">{{ label }}</label>
     `,
     providers: [TOGGLESWITCH_VALUE_ACCESSOR, ToggleSwitchStyle, { provide: TOGGLESWITCH_INSTANCE, useExisting: ToggleSwitch }, { provide: PARENT_INSTANCE, useExisting: ToggleSwitch }],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -102,6 +103,16 @@ export class ToggleSwitch extends BaseEditableHolder<ToggleSwitchPassThrough> {
      * @group Props
      */
     @Input() styleClass: string | undefined;
+    /**
+     * Label of the toggle switch.
+     * @group Props
+     */
+    @Input() label: string | undefined;
+    /**
+     * Style class of the label.
+     * @group Props
+     */
+    @Input() labelStyleClass: string | undefined;
     /**
      * Index of the element in tabbing order.
      * @group Props
@@ -199,8 +210,8 @@ export class ToggleSwitch extends BaseEditableHolder<ToggleSwitchPassThrough> {
                 originalEvent: event,
                 checked: this.modelValue()
             });
-
-            this.input.nativeElement.focus();
+            // Prevent focus visible
+            // this.input.nativeElement.focus();
         }
     }
 

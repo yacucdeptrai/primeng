@@ -646,6 +646,11 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      */
     @Input({ transform: booleanAttribute }) typeahead: boolean = true;
     /**
+     * Whether to hide the overlay on select.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) hideOnSelect: boolean = true;
+    /**
      * Whether to add an item on blur event if the input has value and typeahead is false with multiple mode.
      * @defaultValue false
      * @group Props
@@ -1136,6 +1141,20 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         return equals(this.modelValue(), option, this.equalityKey());
     }
 
+    isSelectedMulti(option: any): boolean {
+        let selected: boolean = false;
+        let value = this.modelValue();
+        if (value && value.length) {
+            for (let i = 0; i < value.length; i++) {
+                if (equals(value[i], option, this.dataKey)) {
+                    selected = true;
+                    break;
+                }
+            }
+        }
+        return selected;
+    }
+
     isOptionMatched(option, value) {
         return this.isValidOption(option) && this.getOptionLabel(option).toLocaleLowerCase(this.searchLocale) === value.toLocaleLowerCase(this.searchLocale);
     }
@@ -1620,7 +1639,11 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
 
         this.onSelect.emit({ originalEvent: event, value: option });
 
-        isHide && this.hide(true);
+        if (this.hideOnSelect) {
+            isHide && this.hide(true);
+        } else if (isHide) {
+            focus(this.inputEL?.nativeElement);
+        }
     }
 
     onOptionMouseEnter(event, index) {
@@ -1652,6 +1675,21 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         this.updateModel(value);
         this.onUnselect.emit({ originalEvent: event, value: removedOption });
         focus(this.inputEL?.nativeElement);
+    }
+
+    removeOptionByObject(item: any) {
+        let value = this.modelValue();
+        if (value && value.length) {
+            if (this.dataKey) {
+                const itemValue = resolveFieldData(item, this.dataKey);
+                value = value.filter((val: any) => resolveFieldData(val, this.dataKey!) != itemValue);
+            } else {
+                value = value.filter((val: any) => val != item);
+            }
+            const removedValue = item;
+            this.updateModel(value);
+            this.onUnselect.emit(removedValue);
+        }
     }
 
     updateModel(options) {
