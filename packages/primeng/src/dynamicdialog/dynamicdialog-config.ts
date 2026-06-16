@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Injector, StaticProvider, Type, ViewContainerRef } from '@angular/core';
 import type { DialogPassThrough } from 'primeng/types/dialog';
 
 /**
@@ -196,6 +196,36 @@ export class DynamicDialogConfig<DataType = any, InputValuesType extends Record<
      * @group Props
      */
     unstyled?: boolean;
+    /**
+     * Minimal mode hides the header and renders content in a bare slot.
+     * @group Props
+     */
+    minimal?: boolean;
+    /**
+     * View container ref used as the parent injector for the loaded component.
+     * @group Props
+     */
+    viewContainerRef?: ViewContainerRef;
+    /**
+     * Injector used as the parent injector for the loaded component.
+     * @group Props
+     */
+    injector?: Injector;
+    /**
+     * Additional static providers exposed to the loaded component's injector.
+     * @group Props
+     */
+    providers?: StaticProvider[];
+    /**
+     * Closes the dialog when the user navigates (NavigationEnd).
+     * @group Props
+     */
+    closeOnNavigation?: boolean;
+    /**
+     * Disables the show/hide motion animations.
+     * @group Props
+     */
+    disableAnimation?: boolean;
 }
 
 /**

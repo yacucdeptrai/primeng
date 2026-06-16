@@ -1654,6 +1654,32 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         focus(this.inputEL?.nativeElement);
     }
 
+    isSelectedMulti(option: any): boolean {
+        const value = this.modelValue();
+        if (value && value.length) {
+            for (let i = 0; i < value.length; i++) {
+                if (equals(value[i], option, this.dataKey)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    removeOptionByObject(item: any) {
+        let value = this.modelValue();
+        if (value && value.length) {
+            if (this.dataKey) {
+                const itemValue = resolveFieldData(item, this.dataKey);
+                value = value.filter((val: any) => resolveFieldData(val, this.dataKey) != itemValue);
+            } else {
+                value = value.filter((val: any) => val != item);
+            }
+            this.updateModel(value);
+            this.onUnselect.emit({ originalEvent: null as any, value: item });
+        }
+    }
+
     updateModel(options) {
         let value = null;
         if (options) {

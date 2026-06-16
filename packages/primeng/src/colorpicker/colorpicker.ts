@@ -34,11 +34,11 @@ const COLORPICKER_INSTANCE = new InjectionToken<ColorPicker>('COLORPICKER_INSTAN
     imports: [CommonModule, AutoFocusModule, SharedModule, Bind, MotionModule, OverlayModule],
     hostDirectives: [Bind],
     template: `
-        <input
+        <button
             *ngIf="!inline"
             #input
-            type="text"
-            [class]="cx('preview')"
+            type="button"
+            [class]="cn(cx('preview'), inputStyleClass)"
             readonly
             [attr.tabindex]="tabindex"
             [attr.disabled]="$disabled() ? '' : undefined"
@@ -50,7 +50,9 @@ const COLORPICKER_INSTANCE = new InjectionToken<ColorPicker>('COLORPICKER_INSTAN
             [attr.aria-label]="ariaLabel"
             [pAutoFocus]="autofocus"
             [pBind]="ptm('preview')"
-        />
+        >
+            <ng-content></ng-content>
+        </button>
 
         <p-overlay
             #overlay
@@ -78,6 +80,7 @@ const COLORPICKER_INSTANCE = new InjectionToken<ColorPicker>('COLORPICKER_INSTAN
                         <div #hue [class]="cx('hue')" (mousedown)="onHueMousedown($event)" (touchstart)="onHueDragStart($event)" (touchmove)="onDrag($event)" (touchend)="onDragEnd()" [pBind]="ptm('hue')">
                             <div #hueHandle [class]="cx('hueHandle')" [pBind]="ptm('hueHandle')"></div>
                         </div>
+                        <input #inputValue type="text" [class]="cx('inputValue')" (input)="onInputValueChange($event)" [ngClass]="{ 'p-disabled': $disabled() }" [pBind]="ptm('inputValue')" />
                     </div>
                 </div>
             </ng-template>
@@ -107,6 +110,11 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
      * @group Props
      */
     @Input() styleClass: string | undefined;
+    /**
+     * Style class of the preview element.
+     * @group Props
+     */
+    @Input() inputStyleClass: string | undefined;
     /**
      * Transition options of the show animation.
      * @group Props
@@ -186,6 +194,18 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
      * @group Emits
      */
     @Output() onHide: EventEmitter<any> = new EventEmitter<any>();
+    /**
+     * Initial color to display, expressed as a hex string. Updates the preview without going through the model.
+     * @group Props
+     */
+    @Input() set initColor(color: string) {
+        this.defaultColor = color.substring(color.indexOf('#') + 1);
+        this.value = this.HEXtoHSB(this.defaultColor);
+        this.inputBgColor = '#' + this.defaultColor;
+        this.updateColorSelector();
+        this.updateUI();
+        this.cd.markForCheck();
+    }
 
     @ViewChild('input') inputViewChild: Nullable<ElementRef>;
 
@@ -196,6 +216,10 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
     value: any = { h: 0, s: 100, b: 100 };
 
     inputBgColor: string | undefined;
+
+    containerSize: number = 180;
+
+    inputValueRegex: RegExp = /^#[0-9a-f]{3,6}$/i;
 
     shown: Nullable<boolean>;
 
@@ -223,6 +247,8 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
 
     hueHandleViewChild: Nullable<ElementRef>;
 
+    inputValueViewChild: Nullable<ElementRef>;
+
     _componentStyle = inject(ColorPickerStyle);
 
     constructor(public overlayService: OverlayService) {
@@ -245,6 +271,11 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         this.hueHandleViewChild = element;
     }
 
+    @ViewChild('inputValue') set inputValue(element: ElementRef) {
+        if (element) element.nativeElement.focus();
+        this.inputValueViewChild = element;
+    }
+
     get ariaLabel() {
         return this.config?.getTranslation(TranslationKeys.ARIA)[TranslationKeys.SELECT_COLOR];
     }
@@ -253,6 +284,8 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         if (this.$disabled()) {
             return;
         }
+
+        event.preventDefault();
 
         this.bindDocumentMousemoveListener();
         this.bindDocumentMouseupListener();
@@ -284,7 +317,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         let pageY = position ? position.pageY : (event as MouseEvent).pageY;
         let top: number = this.hueViewChild?.nativeElement.getBoundingClientRect().top + ((this.document as any).defaultView.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0);
         this.value = this.validateHSB({
-            h: Math.floor((360 * (150 - Math.max(0, Math.min(150, pageY - top)))) / 150),
+            h: Math.floor((360 * (this.containerSize - Math.max(0, Math.min(this.containerSize, pageY - top)))) / this.containerSize),
             s: this.value.s,
             b: this.value.b
         });
@@ -299,6 +332,8 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         if (this.$disabled()) {
             return;
         }
+
+        event.preventDefault();
 
         this.bindDocumentMousemoveListener();
         this.bindDocumentMouseupListener();
@@ -333,8 +368,8 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         let rect = this.colorSelectorViewChild?.nativeElement.getBoundingClientRect();
         let top = rect.top + ((this.document as any).defaultView.pageYOffset || this.document.documentElement.scrollTop || this.document.body.scrollTop || 0);
         let left = rect.left + this.document.body.scrollLeft;
-        let saturation = Math.floor((100 * Math.max(0, Math.min(150, pageX - left))) / 150);
-        let brightness = Math.floor((100 * (150 - Math.max(0, Math.min(150, pageY - top)))) / 150);
+        let saturation = Math.floor((100 * Math.max(0, Math.min(this.containerSize, pageX - left))) / this.containerSize);
+        let brightness = Math.floor((100 * (this.containerSize - Math.max(0, Math.min(this.containerSize, pageY - top)))) / this.containerSize);
         this.value = this.validateHSB({
             h: this.value.h,
             s: saturation,
@@ -381,18 +416,37 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         }
     }
 
-    updateUI() {
+    updateUI(inputValue: boolean = true) {
         if (this.colorHandleViewChild && this.hueHandleViewChild?.nativeElement) {
-            this.colorHandleViewChild.nativeElement.style.left = Math.floor((150 * this.value.s) / 100) + 'px';
-            this.colorHandleViewChild.nativeElement.style.top = Math.floor((150 * (100 - this.value.b)) / 100) + 'px';
-            this.hueHandleViewChild.nativeElement.style.top = Math.floor(150 - (150 * this.value.h) / 360) + 'px';
+            this.colorHandleViewChild.nativeElement.style.left = Math.floor((this.containerSize * this.value.s) / 100) + 'px';
+            this.colorHandleViewChild.nativeElement.style.top = Math.floor((this.containerSize * (100 - this.value.b)) / 100) + 'px';
+            this.hueHandleViewChild.nativeElement.style.top = Math.floor(this.containerSize - (this.containerSize * this.value.h) / 360) + 'px';
         }
 
-        this.inputBgColor = '#' + this.HSBtoHEX(this.value);
+        const hexColor = '#' + this.HSBtoHEX(this.value);
+
+        if (inputValue && this.inputValueViewChild) {
+            this.inputValueViewChild.nativeElement.value = hexColor;
+        }
+
+        this.inputBgColor = hexColor;
     }
 
     onInputFocus() {
         this.onModelTouched();
+    }
+
+    onInputValueChange(event: Event) {
+        const stringValue = (event.target as HTMLInputElement).value;
+        if (!stringValue) return;
+        if (!this.inputValueRegex.test(stringValue)) return;
+        const hexColor = this.validateHEX(stringValue.substring(1));
+
+        this.value = this.HEXtoHSB(hexColor);
+
+        this.updateUI(false);
+        this.updateModel();
+        this.onChange.emit({ originalEvent: event, value: this.getValueToUpdate() });
     }
 
     show() {
@@ -458,6 +512,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
             const documentTarget: any = this.el ? this.el.nativeElement.ownerDocument : 'document';
 
             this.documentMousemoveListener = this.renderer.listen(documentTarget, 'mousemove', (event: MouseEvent) => {
+                event.preventDefault();
                 if (this.colorDragging) {
                     this.pickColor(event);
                 }
@@ -512,9 +567,22 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
         };
     }
 
+    validateSameChar(str: string) {
+        const lowerCaseStr = str.toLowerCase();
+        let i = lowerCaseStr.length;
+        while (i--) {
+            if (lowerCaseStr[i] !== lowerCaseStr[0]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     validateHEX(hex: string) {
         var len = 6 - hex.length;
-        if (len > 0) {
+        if (len === 3 && this.validateSameChar(hex)) {
+            hex = hex + hex;
+        } else if (len > 0) {
             var o: any = [];
             for (var i = 0; i < len; i++) {
                 o.push('0');
@@ -655,18 +723,23 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
             switch (this.format) {
                 case 'hex':
                     this.value = this.HEXtoHSB(value);
+                    this.inputBgColor = value;
                     break;
 
                 case 'rgb':
                     this.value = this.RGBtoHSB(value);
+                    this.inputBgColor = `rgb(${value.r}, ${value.g}, ${value.b})`;
                     break;
 
                 case 'hsb':
                     this.value = value;
+                    const inputBgColor = this.HSBtoRGB(value);
+                    this.inputBgColor = `rgb(${inputBgColor.r}, ${inputBgColor.g}, ${inputBgColor.b})`;
                     break;
             }
         } else {
             this.value = this.HEXtoHSB(this.defaultColor as string);
+            this.inputBgColor = '#' + this.defaultColor;
         }
 
         this.updateColorSelector();

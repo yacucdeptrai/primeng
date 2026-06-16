@@ -20,8 +20,10 @@ import {
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { MotionEvent, MotionOptions } from '@primeuix/motion';
 import { addClass, appendChild, removeClass, setAttribute } from '@primeuix/utils';
+import { filter, Subscription, SubscriptionLike } from 'rxjs';
 import { PrimeTemplate, SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
@@ -91,7 +93,7 @@ const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
                         </p-button>
                     </div>
 
-                    <div [pBind]="ptm('content')" [ngClass]="cx('content')" [attr.data-pc-section]="'content'">
+                    <div [pBind]="ptm('content')" [ngClass]="cx('content')" [class]="contentStyleClass" [id]="contentId" [attr.data-pc-section]="'content'">
                         <ng-content></ng-content>
                         <ng-container *ngTemplateOutlet="contentTemplate || _contentTemplate"></ng-container>
                     </div>
@@ -193,6 +195,21 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
      */
     @Input({ transform: booleanAttribute }) closeOnEscape: boolean = true;
     /**
+     * Specifies if the drawer should close when the user navigates (back/forward in history or router navigation).
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) closeOnNavigation: boolean = false;
+    /**
+     * Style class of the content element.
+     * @group Props
+     */
+    @Input() contentStyleClass: string | undefined;
+    /**
+     * Id of the content element.
+     * @group Props
+     */
+    @Input() contentId: string | undefined;
+    /**
      * Transition options of the animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
@@ -288,6 +305,10 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
 
     animationEndListener: VoidListener;
 
+    router = inject(Router, { optional: true });
+
+    _locationChanges: SubscriptionLike = Subscription.EMPTY;
+
     _componentStyle = inject(DrawerStyle);
 
     onAfterViewInit() {
@@ -376,6 +397,13 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
             this.enableModality();
         }
 
+        if (this.closeOnNavigation && this.router) {
+            this._locationChanges = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+                this.hide();
+                this.visibleChange.emit(false);
+            });
+        }
+
         this.onShow.emit({});
         this.visibleChange.emit(true);
     }
@@ -388,6 +416,8 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
         if (this.modal) {
             this.disableModality();
         }
+
+        this._locationChanges.unsubscribe();
     }
 
     close(event: Event) {

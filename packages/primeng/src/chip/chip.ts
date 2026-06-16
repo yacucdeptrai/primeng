@@ -41,39 +41,10 @@ const CHIP_INSTANCE = new InjectionToken<Chip>('CHIP_INSTANCE');
         <div [pBind]="ptm('label')" [class]="cx('label')" *ngIf="label">{{ label }}</div>
         <ng-container *ngIf="removable">
             <ng-container *ngIf="!removeIconTemplate && !_removeIconTemplate">
-                <span
-                    [pBind]="ptm('removeIcon')"
-                    *ngIf="removeIcon"
-                    [class]="removeIcon"
-                    [ngClass]="cx('removeIcon')"
-                    (click)="close($event)"
-                    (keydown)="onKeydown($event)"
-                    [attr.tabindex]="disabled ? -1 : 0"
-                    [attr.aria-label]="removeAriaLabel"
-                    role="button"
-                ></span>
-                <svg
-                    [pBind]="ptm('removeIcon')"
-                    data-p-icon="times-circle"
-                    *ngIf="!removeIcon"
-                    [class]="cx('removeIcon')"
-                    (click)="close($event)"
-                    (keydown)="onKeydown($event)"
-                    [attr.tabindex]="disabled ? -1 : 0"
-                    [attr.aria-label]="removeAriaLabel"
-                    role="button"
-                />
+                <span [pBind]="ptm('removeIcon')" *ngIf="removeIcon" [class]="removeIcon" [ngClass]="cx('removeIcon')" [attr.aria-label]="removeAriaLabel" role="button"></span>
+                <svg [pBind]="ptm('removeIcon')" data-p-icon="times-circle" *ngIf="!removeIcon" [class]="cx('removeIcon')" [attr.aria-label]="removeAriaLabel" role="button" />
             </ng-container>
-            <span
-                [pBind]="ptm('removeIcon')"
-                *ngIf="removeIconTemplate || _removeIconTemplate"
-                [attr.tabindex]="disabled ? -1 : 0"
-                [class]="cx('removeIcon')"
-                (click)="close($event)"
-                (keydown)="onKeydown($event)"
-                [attr.aria-label]="removeAriaLabel"
-                role="button"
-            >
+            <span [pBind]="ptm('removeIcon')" *ngIf="removeIconTemplate || _removeIconTemplate" [class]="cx('removeIcon')" [attr.aria-label]="removeAriaLabel" role="button">
                 <ng-template *ngTemplateOutlet="removeIconTemplate || _removeIconTemplate"></ng-template>
             </span>
         </ng-container>
@@ -85,7 +56,10 @@ const CHIP_INSTANCE = new InjectionToken<Chip>('CHIP_INSTANCE');
         '[class]': "cn(cx('root'), styleClass)",
         '[style]': "sx('root')",
         '[attr.aria-label]': 'label',
-        '[attr.data-p]': 'dataP'
+        '[attr.tabindex]': 'removable ? (disabled ? -1 : 0) : null',
+        '[attr.data-p]': 'dataP',
+        '(click)': 'removable && close($event)',
+        '(keydown.enter)': 'removable && close($event)'
     },
     hostDirectives: [Bind]
 })
@@ -139,7 +113,7 @@ export class Chip extends BaseComponent<ChipPassThrough> {
      * Icon of the remove element.
      * @group Props
      */
-    @Input() removeIcon: string | undefined;
+    @Input() removeIcon: string | undefined = 'ms ms-cancel ms-icon-sm';
     /**
      * Callback to invoke when a chip is removed.
      * @param {MouseEvent} event - Mouse event.
@@ -230,9 +204,9 @@ export class Chip extends BaseComponent<ChipPassThrough> {
         }
     }
 
-    close(event: MouseEvent) {
+    close(event: Event) {
         this.visible = false;
-        this.onRemove.emit(event);
+        this.onRemove.emit(event as MouseEvent);
     }
 
     onKeydown(event) {

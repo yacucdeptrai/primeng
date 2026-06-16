@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, Type, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, Directive, inject, InjectionToken, Injector, NgModule, StaticProvider, Type, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 import { uuid } from '@primeuix/utils';
+import { MotionOptions } from '@primeuix/motion';
+import { filter, Subscription, SubscriptionLike } from 'rxjs';
 import { SharedModule, TranslationKeys } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind, BindModule } from 'primeng/bind';
@@ -30,9 +33,9 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
             [rtl]="ddconfig?.rtl"
             [closable]="closable"
             [breakpoints]="breakpoints"
-            [styleClass]="ddconfig?.styleClass"
+            [styleClass]="dialogStyleClass"
             [maskStyleClass]="ddconfig?.maskStyleClass"
-            [showHeader]="ddconfig?.showHeader !== false"
+            [showHeader]="ddconfig?.minimal ? false : ddconfig?.showHeader !== false"
             [autoZIndex]="ddconfig?.autoZIndex !== false"
             [baseZIndex]="ddconfig?.baseZIndex || 0"
             [minX]="minX"
@@ -42,6 +45,7 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
             [keepInViewport]="keepInViewport"
             [focusTrap]="ddconfig?.focusTrap !== false"
             [transitionOptions]="ddconfig?.transitionOptions || '150ms cubic-bezier(0, 0, 0.2, 1)'"
+            [motionOptions]="motionOptions"
             [closeAriaLabel]="ddconfig?.closeAriaLabel || defaultCloseAriaLabel"
             [minimizeIcon]="minimizeIcon"
             [maximizeIcon]="maximizeIcon"
@@ -203,6 +207,19 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         return this.ddconfig.unstyled || this.$unstyled();
     }
 
+    get motionOptions(): MotionOptions | undefined {
+        return this.ddconfig?.disableAnimation ? { disabled: true } : undefined;
+    }
+
+    get dialogStyleClass(): string {
+        const classes = [this.ddconfig?.styleClass, this.ddconfig?.minimal ? 'p-dialog-minimal' : undefined].filter(Boolean);
+        return classes.join(' ');
+    }
+
+    private router = inject(Router, { optional: true });
+
+    private _locationChanges: SubscriptionLike = Subscription.EMPTY;
+
     maximized: boolean | undefined;
 
     dragging: boolean | undefined;
@@ -255,6 +272,10 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     onAfterViewInit() {
         this.loadChildComponent(this.childComponentType!);
         this.ariaLabelledBy = this.getAriaLabelledBy();
+        this.bindDocumentEscapeListener();
+        if (this.ddconfig.closeOnNavigation && this.router) {
+            this._locationChanges = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => this.close());
+        }
         this.cd.detectChanges();
     }
 
@@ -271,7 +292,8 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         let viewContainerRef = this.insertionPoint?.viewContainerRef;
         viewContainerRef?.clear();
 
-        this.componentRef = viewContainerRef?.createComponent(componentType);
+        const childInjector = this.createChildInjector();
+        this.componentRef = viewContainerRef?.createComponent(componentType, childInjector ? { injector: childInjector } : undefined);
 
         if (this.inputValues && this.componentRef) {
             Object.entries(this.inputValues).forEach(([key, value]) => {
@@ -280,6 +302,30 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         }
 
         this.dialogRef.onChildComponentLoaded.next(this.componentRef!.instance);
+    }
+
+    private createChildInjector(): Injector | null {
+        const explicitParent = this.ddconfig.injector || this.ddconfig.viewContainerRef?.injector;
+        const extraProviders = this.ddconfig.providers;
+
+        // No caller-supplied parent and no extra providers: keep the default insertion-point
+        // injector, which already resolves the dialog tokens via DynamicDialogInjector.
+        if (!explicitParent && (!extraProviders || extraProviders.length === 0)) {
+            return null;
+        }
+
+        // Re-provide the dialog tokens since a custom parent chain bypasses DynamicDialogInjector.
+        const providers: StaticProvider[] = [
+            { provide: DynamicDialogConfig, useValue: this.ddconfig },
+            { provide: DynamicDialogRef, useValue: this.dialogRef },
+            { provide: DynamicDialog, useValue: this },
+            ...(extraProviders ?? [])
+        ];
+
+        return Injector.create({
+            parent: explicitParent ?? this.injector,
+            providers
+        });
     }
 
     onDialogHide(event: any) {
@@ -332,15 +378,38 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         }
     }
 
-    container: any;
+    // The visible dialog DOM lives in the inner Dialog. The consumer helper reads
+    // `container.style.zIndex`, so delegate to the inner Dialog's container signal.
+    get container(): any {
+        return this.dialog?.container?.() ?? null;
+    }
 
-    wrapper: any;
+    get wrapper(): any {
+        return this.dialog?.wrapper ?? null;
+    }
+
+    /**
+     * Re-surfaced for the consumer's nested-dialog focus fix. The inner Dialog owns the
+     * z-index/focus/listener machinery in v21, so delegate to it.
+     */
+    moveOnTop() {
+        this.dialog?.moveOnTop();
+    }
+
+    bindGlobalListeners() {
+        this.dialog?.bindGlobalListeners();
+    }
+
+    focus() {
+        this.dialog?.focus();
+    }
 
     unbindGlobalListeners() {
         this.unbindDocumentEscapeListener();
         this.unbindDocumentResizeListeners();
         this.unbindDocumentDragListener();
         this.unbindDocumentDragEndListener();
+        this.dialog?.unbindGlobalListeners();
     }
 
     onAnimationStart(event: any) {
@@ -367,7 +436,6 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         if (this.ddconfig.modal) {
             this.disableModality();
         }
-        this.container = null;
     }
 
     bindDocumentDragListener() {
@@ -564,6 +632,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
 
     onDestroy() {
         this.onContainerDestroy();
+        this._locationChanges.unsubscribe();
         if (this.componentRef && typeof this.componentRef.destroy === 'function') {
             this.componentRef.destroy();
         }
@@ -571,8 +640,53 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     }
 }
 
+/**
+ * Alias kept for the consumer helper which imports `DynamicDialogComponent` (the v17 class name).
+ */
+export const DynamicDialogComponent = DynamicDialog;
+export type DynamicDialogComponent = DynamicDialog;
+
+/**
+ * Header bar of the dialog content rendered through the `p-dialog-title` selector.
+ * @group Components
+ */
+@Directive({
+    selector: 'p-dialog-title, p-dialogTitle',
+    standalone: true,
+    host: {
+        class: 'p-dialog-title'
+    }
+})
+export class DynamicDialogTitle {}
+
+/**
+ * Marks an element as the dialog content region.
+ * @group Components
+ */
+@Directive({
+    selector: '[pDialogContent]',
+    standalone: true,
+    host: {
+        class: 'p-dialog-content'
+    }
+})
+export class DynamicDialogActualContent {}
+
+/**
+ * Marks an element as the dialog footer/actions region.
+ * @group Components
+ */
+@Directive({
+    selector: '[pDialogActions]',
+    standalone: true,
+    host: {
+        class: 'p-dialog-footer'
+    }
+})
+export class DynamicDialogActions {}
+
 @NgModule({
-    imports: [DynamicDialog, SharedModule],
-    exports: [DynamicDialog, SharedModule]
+    imports: [DynamicDialog, DynamicDialogTitle, DynamicDialogActualContent, DynamicDialogActions, SharedModule],
+    exports: [DynamicDialog, DynamicDialogTitle, DynamicDialogActualContent, DynamicDialogActions, SharedModule]
 })
 export class DynamicDialogModule {}

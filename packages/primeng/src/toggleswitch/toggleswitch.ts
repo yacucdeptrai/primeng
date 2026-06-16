@@ -46,6 +46,8 @@ export const TOGGLESWITCH_VALUE_ACCESSOR: any = {
     standalone: true,
     imports: [CommonModule, AutoFocus, SharedModule, BindModule],
     template: `
+        <i *ngIf="icon" [class]="icon" [ngClass]="{ 'p-disabled': $disabled() }"></i>
+        <label *ngIf="label" [class]="labelStyleClass" [ngClass]="{ 'p-toggleswitch-label': true, 'p-highlight': checked(), 'p-disabled': $disabled() }">{{ label }}</label>
         <input
             #input
             [attr.id]="inputId"
@@ -112,6 +114,21 @@ export class ToggleSwitch extends BaseEditableHolder<ToggleSwitchPassThrough> {
      * @group Props
      */
     @Input() inputId: string | undefined;
+    /**
+     * Content of the label element.
+     * @group Props
+     */
+    @Input() label: string | undefined;
+    /**
+     * Style class of the label element.
+     * @group Props
+     */
+    @Input() labelStyleClass: string | undefined;
+    /**
+     * Icon of the component.
+     * @group Props
+     */
+    @Input() icon: string | undefined;
     /**
      * When present, it specifies that the component cannot be edited.
      * @group Props

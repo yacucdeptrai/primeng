@@ -17,7 +17,8 @@ const classes = {
     colorBackground: 'p-colorpicker-color-background',
     colorHandle: 'p-colorpicker-color-handle',
     hue: 'p-colorpicker-hue',
-    hueHandle: 'p-colorpicker-hue-handle'
+    hueHandle: 'p-colorpicker-hue-handle',
+    inputValue: 'p-colorpicker-inputvalue p-inputtext'
 };
 
 @Injectable()

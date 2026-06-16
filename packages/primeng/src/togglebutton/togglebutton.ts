@@ -165,6 +165,13 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
      */
     @Input() iconPos: 'left' | 'right' = 'left';
     /**
+     * Set init value.
+     * @group Props
+     */
+    @Input() set initValue(value: boolean) {
+        if (typeof value === 'boolean') this.checked = value;
+    }
+    /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
