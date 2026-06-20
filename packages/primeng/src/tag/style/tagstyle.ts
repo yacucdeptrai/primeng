@@ -2,6 +2,16 @@ import { Injectable } from '@angular/core';
 import { style } from '@primeuix/styles/tag';
 import { BaseStyle } from 'primeng/base';
 
+// Anchor wrapper for the `link` input: display:contents keeps the host flexbox
+// governing icon/label directly, while the <a> is a transparent navigation target.
+const linkStyle = /*css*/ `
+    .p-tag-link {
+        display: contents;
+        color: inherit;
+        text-decoration: none;
+    }
+`;
+
 const classes = {
     root: ({ instance }) => [
         'p-tag p-component',
@@ -16,14 +26,15 @@ const classes = {
         }
     ],
     icon: 'p-tag-icon',
-    label: 'p-tag-label'
+    label: 'p-tag-label',
+    link: 'p-tag-link'
 };
 
 @Injectable()
 export class TagStyle extends BaseStyle {
     name = 'tag';
 
-    style = style;
+    style = style + linkStyle;
 
     classes = classes;
 }

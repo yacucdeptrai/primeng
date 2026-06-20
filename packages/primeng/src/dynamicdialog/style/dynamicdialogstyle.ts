@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
+import { style as dialogStyle } from '@primeuix/styles/dialog';
 import { DialogStyle } from 'primeng/dialog';
+
+// Minimal mode strips the header chrome and tightens the content surface.
+const minimalStyle = `
+    .p-dialog-minimal .p-dialog-content {
+        padding: 0;
+    }
+`;
 
 @Injectable()
 export class DynamicDialogStyle extends DialogStyle {
     name = 'dialog';
+
+    style = `${dialogStyle}${minimalStyle}`;
 }
 
 /**

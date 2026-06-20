@@ -1557,7 +1557,7 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
                 break;
 
             case 'Tab':
-                this.onTabKey(event);
+                this.onEscapeKey(event);
                 break;
 
             case 'Backspace':
@@ -1614,7 +1614,7 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
                 break;
 
             case 'Tab':
-                this.onTabKey(event, true);
+                this.onEscapeKey(event);
                 break;
 
             default:

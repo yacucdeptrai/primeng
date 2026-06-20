@@ -85,7 +85,10 @@ const CHIP_INSTANCE = new InjectionToken<Chip>('CHIP_INSTANCE');
         '[class]': "cn(cx('root'), styleClass)",
         '[style]': "sx('root')",
         '[attr.aria-label]': 'label',
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP',
+        '[attr.tabindex]': 'removable ? (disabled ? -1 : 0) : null',
+        '(click)': 'removable && close($event)',
+        '(keydown.enter)': 'removable && close($event)'
     },
     hostDirectives: [Bind]
 })
@@ -139,7 +142,7 @@ export class Chip extends BaseComponent<ChipPassThrough> {
      * Icon of the remove element.
      * @group Props
      */
-    @Input() removeIcon: string | undefined;
+    @Input() removeIcon: string | undefined = 'ms ms-cancel ms-icon-sm';
     /**
      * Callback to invoke when a chip is removed.
      * @param {MouseEvent} event - Mouse event.
@@ -230,9 +233,9 @@ export class Chip extends BaseComponent<ChipPassThrough> {
         }
     }
 
-    close(event: MouseEvent) {
+    close(event: Event) {
         this.visible = false;
-        this.onRemove.emit(event);
+        this.onRemove.emit(event as MouseEvent);
     }
 
     onKeydown(event) {

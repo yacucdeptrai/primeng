@@ -104,6 +104,15 @@ export class RadioControlRegistry {
         <div [class]="cx('box')" [pBind]="ptm('box')">
             <div [class]="cx('icon')" [pBind]="ptm('icon')"></div>
         </div>
+        <label
+            *ngIf="label"
+            [class]="labelStyleClass"
+            [ngClass]="{ 'p-radiobutton-label': true, 'p-radiobutton-label-active': checked, 'p-disabled': $disabled(), 'p-radiobutton-label-focus': focused }"
+            [attr.for]="inputId"
+            (click)="select($event)"
+            >{{ label }}</label
+        >
+        <i *ngIf="icon" [class]="icon" [ngClass]="{ 'p-disabled': $disabled() }"></i>
     `,
     providers: [RADIO_VALUE_ACCESSOR, RadioButtonStyle, { provide: RADIOBUTTON_INSTANCE, useExisting: RadioButton }, { provide: PARENT_INSTANCE, useExisting: RadioButton }],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -111,7 +120,8 @@ export class RadioControlRegistry {
         '[class]': "cx('root')",
         '[attr.data-p-disabled]': '$disabled()',
         '[attr.data-p-checked]': 'checked',
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP',
+        '(click)': 'onHostClick($event)'
     },
     hostDirectives: [Bind]
 })
@@ -157,6 +167,21 @@ export class RadioButton extends BaseEditableHolder<RadioButtonPassThrough> {
      * @group Props
      */
     @Input() styleClass: string | undefined;
+    /**
+     * Label text displayed next to the radio button.
+     * @group Props
+     */
+    @Input() label: string | undefined;
+    /**
+     * Style class of the label.
+     * @group Props
+     */
+    @Input() labelStyleClass: string | undefined;
+    /**
+     * Icon class rendered after the label.
+     * @group Props
+     */
+    @Input() icon: string | undefined;
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
@@ -223,6 +248,15 @@ export class RadioButton extends BaseEditableHolder<RadioButtonPassThrough> {
         if (!this.$disabled()) {
             this.select(event);
         }
+    }
+
+    onHostClick(event: Event) {
+        // Whole-row click selects, but skip when the native input or label already handles it (avoids double-select).
+        const target = event.target as HTMLElement;
+        if (target === this.inputViewChild?.nativeElement || target?.closest('label')) {
+            return;
+        }
+        this.select(event);
     }
 
     select(event: Event) {

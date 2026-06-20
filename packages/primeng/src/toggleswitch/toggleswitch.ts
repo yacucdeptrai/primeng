@@ -46,6 +46,12 @@ export const TOGGLESWITCH_VALUE_ACCESSOR: any = {
     standalone: true,
     imports: [CommonModule, AutoFocus, SharedModule, BindModule],
     template: `
+        @if (icon) {
+            <i [class]="icon" [ngClass]="{ 'p-disabled': $disabled() }"></i>
+        }
+        @if (label) {
+            <label class="p-toggleswitch-label" [class]="labelStyleClass" [ngClass]="{ 'p-highlight': checked(), 'p-disabled': $disabled(), 'p-focus': focused }">{{ label }}</label>
+        }
         <input
             #input
             [attr.id]="inputId"
@@ -143,6 +149,21 @@ export class ToggleSwitch extends BaseEditableHolder<ToggleSwitchPassThrough> {
      * @group Props
      */
     @Input() ariaLabelledBy: string | undefined;
+    /**
+     * Content of the label element.
+     * @group Props
+     */
+    @Input() label: string | undefined;
+    /**
+     * Style class of the label.
+     * @group Props
+     */
+    @Input() labelStyleClass: string | undefined;
+    /**
+     * Icon to display before the switch.
+     * @group Props
+     */
+    @Input() icon: string | undefined;
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props

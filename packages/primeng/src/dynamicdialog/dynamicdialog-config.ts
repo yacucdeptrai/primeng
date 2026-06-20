@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Injector, StaticProvider, Type, ViewContainerRef } from '@angular/core';
 import type { DialogPassThrough } from 'primeng/types/dialog';
 
 /**
@@ -162,6 +162,26 @@ export class DynamicDialogConfig<DataType = any, InputValuesType extends Record<
      */
     position?: string;
     /**
+     * When enabled, renders the dialog as a bare content surface without header chrome.
+     * @group Props
+     */
+    minimal?: boolean;
+    /**
+     * View container ref whose injector seeds the loaded component.
+     * @group Props
+     */
+    viewContainerRef?: ViewContainerRef;
+    /**
+     * Injector used as the parent for the loaded component.
+     * @group Props
+     */
+    injector?: Injector;
+    /**
+     * Extra providers exposed to the loaded component.
+     * @group Props
+     */
+    providers?: StaticProvider[];
+    /**
      * Defines a string that labels the close button for accessibility.
      * @group Props
      */
@@ -186,6 +206,16 @@ export class DynamicDialogConfig<DataType = any, InputValuesType extends Record<
      * @group Props
      */
     templates?: DynamicDialogTemplates;
+    /**
+     * Closes the dialog when the user navigates (NavigationEnd) while it is open.
+     * @group Props
+     */
+    closeOnNavigation?: boolean;
+    /**
+     * Disables the show and hide animations.
+     * @group Props
+     */
+    disableAnimation?: boolean;
     /**
      * Used to pass attributes to DOM elements inside the Dialog component.
      * @group Props

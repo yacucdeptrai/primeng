@@ -135,7 +135,7 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
     _tooltipOptions = {
         tooltipLabel: null,
-        tooltipPosition: 'right',
+        tooltipPosition: 'top',
         tooltipEvent: 'hover',
         appendTo: 'body',
         positionStyle: null,

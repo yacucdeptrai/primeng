@@ -67,9 +67,11 @@ export class DialogService {
             sub.unsubscribe();
         });
 
+        const parentInjector = config.injector || config.viewContainerRef?.injector || this.injector;
+
         const componentRef = createComponent(DynamicDialog, {
             environmentInjector: this.appRef.injector,
-            elementInjector: new DynamicDialogInjector(this.injector, map)
+            elementInjector: new DynamicDialogInjector(parentInjector, map)
         });
 
         this.appRef.attachView(componentRef.hostView);

@@ -2,6 +2,43 @@ import { Injectable } from '@angular/core';
 import { style } from '@primeuix/styles/colorpicker';
 import { BaseStyle } from 'primeng/base';
 
+const css = /*css*/ `
+.p-colorpicker-panel {
+    width: 239px;
+    height: 282px;
+}
+
+.p-colorpicker-color-selector {
+    width: 180px;
+    height: 180px;
+    inset-block-start: 16px;
+    inset-inline-start: 16px;
+}
+
+.p-colorpicker-color {
+    width: 180px;
+    height: 180px;
+}
+
+.p-colorpicker-hue {
+    height: 180px;
+    inset-block-start: 16px;
+    inset-inline-start: 205px;
+}
+
+.p-colorpicker-hue-handle {
+    border-radius: 4px;
+}
+
+.p-colorpicker-inputvalue {
+    position: absolute;
+    inset-block-start: 220px;
+    inset-inline-start: 16px;
+    width: 205px;
+    height: 46px;
+}
+`;
+
 const classes = {
     root: ({ instance }) => ['p-colorpicker p-component', { 'p-colorpicker-overlay': !instance.inline, 'p-colorpicker-dragging': instance.colorDragging || instance.hueDragging }],
     preview: ({ instance }) => ['p-colorpicker-preview', { 'p-disabled': instance.$disabled() }],
@@ -17,7 +54,8 @@ const classes = {
     colorBackground: 'p-colorpicker-color-background',
     colorHandle: 'p-colorpicker-color-handle',
     hue: 'p-colorpicker-hue',
-    hueHandle: 'p-colorpicker-hue-handle'
+    hueHandle: 'p-colorpicker-hue-handle',
+    inputValue: 'p-colorpicker-inputvalue p-inputtext'
 };
 
 @Injectable()
@@ -25,6 +63,8 @@ export class ColorPickerStyle extends BaseStyle {
     name = 'colorpicker';
 
     style = style;
+
+    css = css;
 
     classes = classes;
 }
@@ -70,7 +110,11 @@ export enum ColorPickerClasses {
     /**
      * Class name of the hue handle element
      */
-    hueHandle = 'p-colorpicker-hue-handle'
+    hueHandle = 'p-colorpicker-hue-handle',
+    /**
+     * Class name of the in-panel hex input element
+     */
+    inputValue = 'p-colorpicker-inputvalue'
 }
 
 export interface ColorPickerStyle extends BaseStyle {}

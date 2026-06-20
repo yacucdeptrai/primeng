@@ -2,6 +2,18 @@ import { Injectable } from '@angular/core';
 import { style } from '@primeuix/styles/chip';
 import { BaseStyle } from 'primeng/base';
 
+// Whole-chip becomes focusable/clickable when removable (handlers on host).
+// v21 dropped the .p-chip-removable class, so key the cursor off data-p.
+const removableStyle = `
+.p-chip:focus-visible {
+    outline: 0;
+}
+
+.p-chip[data-p~="removable"] {
+    cursor: pointer;
+}
+`;
+
 const inlineStyles = {
     root: ({ instance }) => ({
         display: !instance.visible && 'none'
@@ -25,7 +37,7 @@ const classes = {
 export class ChipStyle extends BaseStyle {
     name = 'chip';
 
-    style = style;
+    style = style + removableStyle;
 
     classes = classes;
 

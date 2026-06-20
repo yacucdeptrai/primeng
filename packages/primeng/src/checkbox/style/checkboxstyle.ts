@@ -11,6 +11,10 @@ const style = /*css*/ `
     p-checkbox.ng-invalid.ng-dirty .p-checkbox-box {
         border-color: dt('checkbox.invalid.border.color');
     }
+
+    .p-checkbox-label {
+        cursor: pointer;
+    }
 `;
 
 const classes = {

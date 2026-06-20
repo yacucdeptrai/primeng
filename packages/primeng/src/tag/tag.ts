@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, booleanAttribute, ChangeDetectionStrategy, Component, ContentChild, ContentChildren, inject, InjectionToken, Input, NgModule, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { RouterLink, RouterModule } from '@angular/router';
 import { PrimeTemplate, SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
@@ -15,16 +16,23 @@ const TAG_INSTANCE = new InjectionToken<Tag>('TAG_INSTANCE');
 @Component({
     selector: 'p-tag',
     standalone: true,
-    imports: [CommonModule, SharedModule, Bind],
+    imports: [CommonModule, SharedModule, RouterModule, Bind],
     template: `
-        <ng-content></ng-content>
-        <ng-container *ngIf="!iconTemplate && !_iconTemplate">
-            <span [class]="cx('icon')" [ngClass]="icon" [pBind]="ptm('icon')" *ngIf="icon"></span>
+        <ng-container *ngIf="link != null; else tagContent">
+            <a [class]="cx('link')" [routerLink]="link">
+                <ng-container *ngTemplateOutlet="tagContent"></ng-container>
+            </a>
         </ng-container>
-        <span [class]="cx('icon')" [pBind]="ptm('icon')" *ngIf="iconTemplate || _iconTemplate">
-            <ng-template *ngTemplateOutlet="iconTemplate || _iconTemplate"></ng-template>
-        </span>
-        <span [class]="cx('label')" [pBind]="ptm('label')">{{ value }}</span>
+        <ng-template #tagContent>
+            <ng-content></ng-content>
+            <ng-container *ngIf="!iconTemplate && !_iconTemplate">
+                <span [class]="cx('icon')" [ngClass]="icon" [pBind]="ptm('icon')" *ngIf="icon"></span>
+            </ng-container>
+            <span [class]="cx('icon')" [pBind]="ptm('icon')" *ngIf="iconTemplate || _iconTemplate">
+                <ng-template *ngTemplateOutlet="iconTemplate || _iconTemplate"></ng-template>
+            </span>
+            <span [class]="cx('label')" [pBind]="ptm('label')">{{ value }}</span>
+        </ng-template>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
@@ -71,6 +79,11 @@ export class Tag extends BaseComponent<TagPassThrough> implements AfterContentIn
      * @group Props
      */
     @Input({ transform: booleanAttribute }) rounded: boolean | undefined;
+    /**
+     * Link for navigation; renders the tag as a routerLink anchor when set.
+     * @group Props
+     */
+    @Input() link: RouterLink['routerLink'];
 
     /**
      * Custom icon template.
@@ -103,7 +116,7 @@ export class Tag extends BaseComponent<TagPassThrough> implements AfterContentIn
 }
 
 @NgModule({
-    imports: [Tag, SharedModule],
+    imports: [Tag, SharedModule, RouterModule],
     exports: [Tag, SharedModule]
 })
 export class TagModule {}

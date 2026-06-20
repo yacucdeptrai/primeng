@@ -934,7 +934,8 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
                 break;
 
             case 'Tab':
-                this.onTabKey(event);
+                // Tab dismisses without committing the focused item (UX divergence from default).
+                this.onEscapeKey(event);
                 break;
 
             case 'PageDown':

@@ -123,6 +123,13 @@ export class SelectButton extends BaseEditableHolder<SelectButtonPassThrough> im
      */
     @Input({ transform: numberAttribute }) tabindex: number = 0;
     /**
+     * Seeds the initial selection without a model binding.
+     * @group Props
+     */
+    @Input() set initValue(value: any) {
+        this.value = value;
+    }
+    /**
      * When specified, allows selecting multiple values.
      * @group Props
      */

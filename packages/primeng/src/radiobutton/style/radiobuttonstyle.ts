@@ -11,6 +11,14 @@ const style = /*css*/ `
     p-radiobutton.ng-invalid.ng-dirty .p-radiobutton-box {
         border-color: dt('radiobutton.invalid.border.color');
     }
+
+    .p-radiobutton:not([data-p-disabled='true']) {
+        cursor: pointer;
+    }
+
+    .p-radiobutton-label:not(.p-disabled) {
+        cursor: pointer;
+    }
 `;
 
 const classes = {
