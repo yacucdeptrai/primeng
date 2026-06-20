@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/paginator';
+import { style as paginator_style } from '@primeuix/styles/paginator';
 import { BaseStyle } from 'primeng/base';
+
+const style = /*css*/ `
+${paginator_style}
+
+/* Vertically centre the "Showing X to Y of Z entries" report so it sits on the paginator line. */
+.p-paginator .p-paginator-current {
+    display: flex;
+    align-items: center;
+}
+`;
 
 const classes = {
     paginator: ({ instance }) => ['p-paginator p-component'],

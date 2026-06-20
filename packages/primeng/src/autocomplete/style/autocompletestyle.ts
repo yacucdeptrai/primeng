@@ -91,6 +91,21 @@ p-autocomplete.ng-invalid.ng-dirty .p-autocomplete-input::placeholder {
 .p-autocomplete-token-label {
     line-height: 1;
 }
+
+/* Fixed single-row height for full-width autocompletes (.p-autocomplete-full): the base container is
+   min-height only, so it gains/loses a row as the selected-count token renders/clears and the field
+   jumps height. Pin one row; the count token always fits on a single line. */
+.p-autocomplete-full .p-autocomplete-input-multiple {
+    height: 56px;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+.p-autocomplete-full .p-autocomplete-input-multiple > li,
+.p-autocomplete-full .p-autocomplete-input-multiple .p-autocomplete-token {
+    white-space: nowrap;
+    max-width: none;
+}
 `;
 
 const inlineStyles = {

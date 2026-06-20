@@ -18,6 +18,17 @@ const style = /*css*/ `
     .p-select.ng-invalid.ng-dirty .p-select-label.p-placeholder {
         color: dt('select.invalid.placeholder.color');
     }
+
+    /* Thin, button-less scrollbar inside select overlays (the global thin scrollbar only targets
+       <html>, so the overlay's scroll container otherwise shows OS scrollbar arrow buttons on Windows). */
+    .p-select-overlay .p-select-list-container::-webkit-scrollbar,
+    .p-select-overlay .p-virtualscroller::-webkit-scrollbar { width: 4px; height: 4px; }
+    .p-select-overlay .p-select-list-container::-webkit-scrollbar-button,
+    .p-select-overlay .p-virtualscroller::-webkit-scrollbar-button { display: none; }
+    .p-select-overlay .p-select-list-container::-webkit-scrollbar-track,
+    .p-select-overlay .p-virtualscroller::-webkit-scrollbar-track { background: #424242; border-radius: 5px; }
+    .p-select-overlay .p-select-list-container::-webkit-scrollbar-thumb,
+    .p-select-overlay .p-virtualscroller::-webkit-scrollbar-thumb { background: #646464; border-radius: 5px; }
 `;
 
 const classes = {

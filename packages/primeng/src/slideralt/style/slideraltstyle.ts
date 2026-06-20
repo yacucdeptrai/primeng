@@ -1,6 +1,19 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/slider';
+import { style as slider_style } from '@primeuix/styles/slider';
 import { BaseStyle } from 'primeng/base';
+
+const style = /*css*/ `
+${slider_style}
+
+/* slideralt writes %-geometry on the range/handle via [ngStyle] but never wires the BaseStyle
+   inlineStyles, so without an explicit position they stay static and collapse to 0. The base carries
+   the orientation geometry (RTL-safe logical props); assert position only — don't duplicate geometry. */
+.p-slider .p-slider-range,
+.p-slider .p-slider-handle {
+    position: absolute;
+    display: block;
+}
+`;
 
 const inlineStyles = {
     handle: { position: 'absolute' },

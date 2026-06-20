@@ -71,7 +71,8 @@ const style = /*css*/ `
         transform: none;
         font-size: 16px;
         line-height: 1;
-        color: dt('checkbox.icon.checked.color');
+        --wght: 700; /* bold Material-Symbols check (the .ms font-variation-settings reads --wght) */
+        color: dt('checkbox.icon.checked.color'); /* dark glyph on the indigo checked box (token resolves to primary.contrast). */
     }
 
     /* Box-only focus border, no ring — the box border turns indigo on focus, matching the
