@@ -48,22 +48,30 @@ const style = /*css*/ `
         min-width: 0; /* allow the label to wrap instead of overflowing narrow rows */
     }
 
-    /* Box-only focus: indigo border, no ring/halo.
-       focus.border.color already resolves to the indigo primary via the focus-visible
-       path in styled; remove the host state-layer halo (the Material preset css paints a
-       wide box-shadow ring sized for the 20x20 host that smears on a label-bearing row). */
-    .p-radiobutton:not(.p-disabled):has(.p-radiobutton-input:focus-visible),
-    .p-radiobutton-checked:not(.p-disabled):has(.p-radiobutton-input:focus-visible),
-    .p-radiobutton:not(.p-disabled):has(.p-radiobutton-input:hover),
-    .p-radiobutton-checked:not(.p-disabled):has(.p-radiobutton-input:hover) {
+    /* Material paints the radio focus/hover state-layer as a box-shadow halo on the HOST
+       (.p-radiobutton: 0 0 1px 10px ...). For a 20px box-only radio that's a tight circle,
+       but a label-bearing radio widens the host (label beside the box), smearing the halo
+       into a wide oval across the whole option. For labeled radios ONLY, kill the host halo
+       and re-anchor the SAME state layer onto the fixed 20px box. The extra .p-radiobutton-has-label
+       class lifts specificity above the preset css so this wins regardless of injection order.
+       Non-label radios keep the preset's host halo (correct, since their host is 20px). */
+    .p-radiobutton.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:hover),
+    .p-radiobutton.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:focus-visible),
+    .p-radiobutton-checked.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:hover),
+    .p-radiobutton-checked.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:focus-visible) {
         box-shadow: none;
     }
-
-    .p-radiobutton:not(.p-disabled):has(.p-radiobutton-input:focus-visible) .p-radiobutton-box {
-        border-color: dt('radiobutton.focus.border.color');
-        box-shadow: none;
-        outline: 0 none;
-        outline-offset: 0;
+    .p-radiobutton.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:hover) .p-radiobutton-box {
+        box-shadow: 0 0 1px 10px color-mix(in srgb, dt('text.color'), transparent 96%);
+    }
+    .p-radiobutton.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:focus-visible) .p-radiobutton-box {
+        box-shadow: 0 0 1px 10px color-mix(in srgb, dt('text.color'), transparent 88%);
+    }
+    .p-radiobutton-checked.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:hover) .p-radiobutton-box {
+        box-shadow: 0 0 1px 10px color-mix(in srgb, dt('radiobutton.checked.border.color'), transparent 92%);
+    }
+    .p-radiobutton-checked.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:focus-visible) .p-radiobutton-box {
+        box-shadow: 0 0 1px 10px color-mix(in srgb, dt('radiobutton.checked.border.color'), transparent 84%);
     }
 `;
 
