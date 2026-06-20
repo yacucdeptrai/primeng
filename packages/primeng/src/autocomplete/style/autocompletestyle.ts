@@ -34,6 +34,63 @@ p-auto-complete.ng-invalid.ng-dirty .p-autocomplete-input::placeholder,
 p-autocomplete.ng-invalid.ng-dirty .p-autocomplete-input::placeholder {
     color: dt('autocomplete.invalid.placeholder.color');
 }
+
+/* Multi-token container chrome. v17 styled .p-autocomplete-multiple-container;
+   v21 renamed it to .p-autocomplete-input-multiple and leaves it unstyled, so the
+   token row renders as a tiny bare box. Paint the bordered formField surface plus
+   the summary/+N token from formField/highlight tokens. */
+.p-autocomplete-input-multiple {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+    min-height: 3.5rem;
+    list-style: none;
+    background: dt('autocomplete.background');
+    border: 1px solid dt('autocomplete.border.color');
+    border-radius: dt('autocomplete.border.radius');
+    color: dt('autocomplete.color');
+}
+
+.p-autocomplete-input-multiple:not(.p-disabled):hover {
+    border-color: dt('autocomplete.hover.border.color');
+}
+
+.p-autocomplete:not(.p-disabled).p-focus .p-autocomplete-input-multiple {
+    border-color: dt('autocomplete.focus.border.color');
+}
+
+.p-autocomplete-input-multiple .p-autocomplete-input-token {
+    display: inline-flex;
+    flex: 1 1 auto;
+    padding: 0.5rem 0;
+}
+
+.p-autocomplete-input-multiple input {
+    background: transparent;
+    border: 0 none;
+    outline: 0 none;
+    width: 100%;
+    color: dt('autocomplete.color');
+    font-family: inherit;
+}
+
+/* Summary +N token (AltAutoComplete) painted from the highlight pair. */
+.p-autocomplete-token {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: dt('autocomplete.option.selected.background');
+    color: dt('autocomplete.option.selected.color');
+    border-radius: dt('autocomplete.border.radius');
+}
+
+.p-autocomplete-token-label {
+    line-height: 1;
+}
 `;
 
 const inlineStyles = {

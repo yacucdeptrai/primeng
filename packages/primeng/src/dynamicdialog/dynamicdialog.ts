@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentRef, inject, Injector, InjectionToken, NgModule, StaticProvider, Type, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, Directive, inject, Injector, InjectionToken, NgModule, StaticProvider, Type, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { MotionOptions } from '@primeuix/motion';
 import { uuid } from '@primeuix/utils';
@@ -633,8 +633,38 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
 // so consumers (e.g. primeng-helper) importing that name keep resolving.
 export { DynamicDialog as DynamicDialogComponent };
 
+// Header bar of the dialog content rendered through the `p-dialog-title` selector.
+@Directive({
+    selector: 'p-dialog-title, p-dialogTitle',
+    standalone: true,
+    host: {
+        class: 'p-dialog-title'
+    }
+})
+export class DynamicDialogTitle {}
+
+// Marks an element as the dialog content region.
+@Directive({
+    selector: '[pDialogContent]',
+    standalone: true,
+    host: {
+        class: 'p-dialog-content'
+    }
+})
+export class DynamicDialogActualContent {}
+
+// Marks an element as the dialog footer/actions region.
+@Directive({
+    selector: '[pDialogActions]',
+    standalone: true,
+    host: {
+        class: 'p-dialog-footer'
+    }
+})
+export class DynamicDialogActions {}
+
 @NgModule({
-    imports: [DynamicDialog, SharedModule],
-    exports: [DynamicDialog, SharedModule]
+    imports: [DynamicDialog, SharedModule, DynamicDialogTitle, DynamicDialogActualContent, DynamicDialogActions],
+    exports: [DynamicDialog, SharedModule, DynamicDialogTitle, DynamicDialogActualContent, DynamicDialogActions]
 })
 export class DynamicDialogModule {}

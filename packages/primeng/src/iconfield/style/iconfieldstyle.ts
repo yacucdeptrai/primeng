@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/iconfield';
+import { style as baseStyle } from '@primeuix/styles/iconfield';
 import { BaseStyle } from 'primeng/base';
+
+/* Vertical-center the icon regardless of glyph line-box (Material Symbols .ms glyphs
+   have no icon.size token, so the base margin-top math mis-centers). transform centering
+   supersedes the base margin-top; covers the markup migrated from v17 .p-input-icon-left. */
+const style = `
+${baseStyle}
+.p-iconfield > .p-inputicon {
+    margin-top: 0;
+    transform: translateY(-50%);
+}
+`;
 
 const classes = {
     root: ({ instance }) => [

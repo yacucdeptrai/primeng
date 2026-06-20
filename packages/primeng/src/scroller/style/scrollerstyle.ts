@@ -59,6 +59,42 @@ const css = /*css*/ `
 .p-virtualscroller-inline .p-virtualscroller-content {
     position: static;
 }
+
+/* Thin scrollbar skin shared across overlay/scroll surfaces (v21 selectors).
+   #424242/#646464 have no theme token — kept as the legacy oracle literals. */
+.p-select-overlay::-webkit-scrollbar,
+.p-multiselect-overlay::-webkit-scrollbar,
+.p-autocomplete-overlay::-webkit-scrollbar,
+.p-autocomplete-multiple-nowrap > .p-autocomplete-input-multiple::-webkit-scrollbar,
+.p-dialog-content::-webkit-scrollbar,
+.p-textarea::-webkit-scrollbar,
+.p-scroller::-webkit-scrollbar,
+.p-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+.p-select-overlay::-webkit-scrollbar-track,
+.p-multiselect-overlay::-webkit-scrollbar-track,
+.p-autocomplete-overlay::-webkit-scrollbar-track,
+.p-autocomplete-multiple-nowrap > .p-autocomplete-input-multiple::-webkit-scrollbar-track,
+.p-dialog-content::-webkit-scrollbar-track,
+.p-textarea::-webkit-scrollbar-track,
+.p-scroller::-webkit-scrollbar-track,
+.p-scrollbar::-webkit-scrollbar-track {
+    background: #424242;
+    border-radius: 3px;
+}
+.p-select-overlay::-webkit-scrollbar-thumb,
+.p-multiselect-overlay::-webkit-scrollbar-thumb,
+.p-autocomplete-overlay::-webkit-scrollbar-thumb,
+.p-autocomplete-multiple-nowrap > .p-autocomplete-input-multiple::-webkit-scrollbar-thumb,
+.p-dialog-content::-webkit-scrollbar-thumb,
+.p-textarea::-webkit-scrollbar-thumb,
+.p-scroller::-webkit-scrollbar-thumb,
+.p-scrollbar::-webkit-scrollbar-thumb {
+    background: #646464;
+    border-radius: 3px;
+}
 `;
 
 const classes = {

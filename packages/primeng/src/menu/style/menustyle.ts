@@ -1,6 +1,25 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/menu';
+import { style as menu_style } from '@primeuix/styles/menu';
 import { BaseStyle } from 'primeng/base';
+
+// Active-route menu item marker (consumer applies `p-menuitem-link-active` via
+// routerLinkActive). v21 has no native active token, so reuse the item focus bg.
+// Also cover the v21 item-link/label markup; line-height keeps labels readable.
+const menuModifiers = /*css*/ `
+    .p-menuitem-link-active,
+    .p-menu-item-link.p-menuitem-link-active {
+        background: dt('menu.item.focus.background');
+    }
+    .p-menuitem-link-active:hover,
+    .p-menu-item-link.p-menuitem-link-active:hover {
+        background: dt('menu.item.focus.background');
+    }
+    .p-menu .p-menu-item-label {
+        line-height: 1.5;
+    }
+`;
+
+const style = menu_style + menuModifiers;
 
 const inlineStyles = {
     root: ({ instance }) => ({ position: instance.popup ? 'absolute' : 'relative' })

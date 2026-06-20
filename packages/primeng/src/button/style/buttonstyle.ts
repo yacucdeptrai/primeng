@@ -1,6 +1,140 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/button';
+import { style as button_style } from '@primeuix/styles/button';
 import { BaseStyle } from 'primeng/base';
+
+const style = /*css*/ `
+    ${button_style}
+
+    /* Icon glyph paints currentColor; pin icon-only/text variants to text color so glyphs stay visible on dark */
+    .p-button-icon-only:not([class*='p-button-']) .p-button-icon,
+    .p-button-icon-only.p-button-text .p-button-icon,
+    .p-button-text:not(.p-button-dark) .p-button-icon {
+        color: dt('text.color');
+    }
+
+    /* Dark severity family (base / outlined / text + hover/focus/active; buttonset + splitbutton) */
+    .p-button-dark,
+    .p-buttonset-dark > .p-button,
+    .p-splitbutton-dark > .p-button {
+        color: #ffffff;
+        background: #2f2f2f;
+        border: 0 none;
+    }
+    .p-button-dark:enabled:hover,
+    .p-buttonset-dark > .p-button:enabled:hover,
+    .p-splitbutton-dark > .p-button:enabled:hover {
+        background: #262626;
+        color: #ffffff;
+        border-color: transparent;
+    }
+    .p-button-dark:enabled:focus,
+    .p-buttonset-dark > .p-button:enabled:focus,
+    .p-splitbutton-dark > .p-button:enabled:focus {
+        background: #262626;
+        box-shadow: none;
+    }
+    .p-button-dark:enabled:active,
+    .p-buttonset-dark > .p-button:enabled:active,
+    .p-splitbutton-dark > .p-button:enabled:active {
+        background: #242424;
+        color: #ffffff;
+        border-color: transparent;
+    }
+
+    .p-button-dark.p-button-outlined,
+    .p-buttonset-dark > .p-button.p-button-outlined,
+    .p-splitbutton-dark > .p-button.p-button-outlined {
+        background-color: transparent;
+        color: #ffffff;
+        border: 0 none;
+    }
+    .p-button-dark.p-button-outlined:enabled:hover,
+    .p-buttonset-dark > .p-button.p-button-outlined:enabled:hover,
+    .p-splitbutton-dark > .p-button.p-button-outlined:enabled:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        border: 0 none;
+    }
+    .p-button-dark.p-button-outlined:enabled:active,
+    .p-buttonset-dark > .p-button.p-button-outlined:enabled:active,
+    .p-splitbutton-dark > .p-button.p-button-outlined:enabled:active {
+        background: rgba(255, 255, 255, 0.18);
+        color: #ffffff;
+        border: 0 none;
+    }
+
+    .p-button-dark.p-button-text,
+    .p-buttonset-dark > .p-button.p-button-text,
+    .p-splitbutton-dark > .p-button.p-button-text {
+        background-color: transparent;
+        color: #ffffff;
+        border-color: transparent;
+    }
+    .p-button-dark.p-button-text:enabled:hover,
+    .p-buttonset-dark > .p-button.p-button-text:enabled:hover,
+    .p-splitbutton-dark > .p-button.p-button-text:enabled:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: transparent;
+        color: #ffffff;
+    }
+    .p-button-dark.p-button-text:enabled:active,
+    .p-buttonset-dark > .p-button.p-button-text:enabled:active,
+    .p-splitbutton-dark > .p-button.p-button-text:enabled:active {
+        background: rgba(255, 255, 255, 0.18);
+        border-color: transparent;
+        color: #ffffff;
+    }
+    .p-button-dark.p-button-text:enabled:focus,
+    .p-button-dark.p-button-outlined:enabled:focus,
+    .p-buttonset-dark > .p-button.p-button-text:enabled:focus,
+    .p-buttonset-dark > .p-button.p-button-outlined:enabled:focus,
+    .p-splitbutton-dark > .p-button.p-button-text:enabled:focus,
+    .p-splitbutton-dark > .p-button.p-button-outlined:enabled:focus {
+        background: rgba(255, 255, 255, 0.14);
+    }
+
+    /* Dark family keeps icon glyphs white regardless of variant */
+    .p-button-dark .p-button-icon,
+    .p-buttonset-dark > .p-button .p-button-icon,
+    .p-splitbutton-dark > .p-button .p-button-icon {
+        color: #ffffff;
+    }
+
+    /* Size variants */
+    .p-button-xs {
+        font-size: 0.875rem;
+        padding: 0.468rem 0.656rem;
+    }
+    .p-button-xs .p-button-icon {
+        font-size: 20px;
+    }
+    .p-button-md {
+        font-size: 1rem;
+        padding: 0.75rem 1rem;
+    }
+    .p-button-sm .p-button-icon {
+        font-size: 20px;
+    }
+
+    /* Rounded icon size + shape variants */
+    .p-button-rounded.p-button-xs {
+        width: 1.875rem;
+        height: 1.875rem;
+    }
+    .p-button-rounded.p-button-sm-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+
+    /* Shrink: center content, let icon/label shrink */
+    .p-button-shrink {
+        justify-content: center;
+    }
+    .p-button-shrink .p-button-icon,
+    .p-button-shrink .p-button-label {
+        flex: 0 1 auto;
+    }
+`;
 
 const classes = {
     root: ({ instance }) => [

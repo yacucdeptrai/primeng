@@ -1,6 +1,35 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/panel';
+import { style as baseStyle } from '@primeuix/styles/panel';
 import { BaseStyle } from 'primeng/base';
+
+// Fork additions folded in from daplex + kamplex consumer band-aids so both apps drop their copies.
+const forkStyle = /*css*/ `
+    /* v21 content-container is display:grid with an implicit auto column → wide rows
+       (long filenames) overflow the panel. Bound the column so children shrink/truncate. */
+    .p-panel-content-container {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Neutral surface + utility panel modifiers (no semantic panel token → keep dark literals). */
+    .p-panel-header-neutral > .p-panel-header {
+        background: #323232;
+    }
+
+    .p-panel-content-neutral .p-panel-content {
+        background: #262626;
+    }
+
+    .p-panel-content-p-0 .p-panel-content {
+        padding: 0;
+    }
+
+    .p-panel-icons-rtl .p-panel-icons {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+`;
+
+const style = `${baseStyle}${forkStyle}`;
 
 const classes = {
     root: ({ instance }) => [

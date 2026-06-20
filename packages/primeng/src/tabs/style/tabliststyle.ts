@@ -1,6 +1,20 @@
 import { Injectable } from '@angular/core';
 import { BaseStyle } from 'primeng/base';
 
+// Legacy tabmenu modifiers (v21 removed TabMenu; consumers still apply these on
+// their tab-nav markup, which renders a `p-tablist`). `-center` centers the nav;
+// the base `p-tabmenu` carries a bottom border from the tablist border token.
+const tabmenuModifiers = /*css*/ `
+    .p-tabmenu-center .p-tablist {
+        justify-content: center;
+    }
+    .p-tabmenu .p-tablist {
+        border-style: solid;
+        border-color: dt('tabs.tablist.border.color');
+        border-width: 0 0 1px 0;
+    }
+`;
+
 const classes = {
     root: 'p-tablist',
     content: 'p-tablist-content p-tablist-viewport',
@@ -13,6 +27,8 @@ const classes = {
 @Injectable()
 export class TabListStyle extends BaseStyle {
     name = 'tablist';
+
+    style = tabmenuModifiers;
 
     classes = classes;
 }

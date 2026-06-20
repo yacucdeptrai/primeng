@@ -6,6 +6,11 @@ const style = /*css*/ `
     ${multiselect_style}
 
     /* For PrimeNG */
+    /* dark label text (Material multiselect.color resolves too dark; literal .87 white) */
+    .p-multiselect .p-multiselect-label {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
    .p-multiselect.ng-invalid.ng-dirty {
         border-color: dt('multiselect.invalid.border.color');
     }

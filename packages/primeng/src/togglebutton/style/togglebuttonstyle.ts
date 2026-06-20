@@ -13,6 +13,22 @@ const style = /*css*/ `
     .p-togglebutton.ng-invalid.ng-dirty {
         border-color: dt('togglebutton.invalid.border.color');
     }
+
+    /* Dark severity variant (history, media-filter) */
+    .p-togglebutton.p-togglebutton-dark {
+        background: #2f2f2f;
+    }
+    .p-togglebutton.p-togglebutton-dark:focus {
+        background: #262626;
+    }
+    .p-togglebutton.p-togglebutton-dark:active {
+        background: #242424;
+    }
+    /* Icon glyph stays white in both unchecked + checked states */
+    .p-togglebutton.p-togglebutton-dark .p-togglebutton-icon,
+    .p-togglebutton.p-togglebutton-checked.p-togglebutton-dark .p-togglebutton-icon {
+        color: #ffffff;
+    }
 `;
 
 const classes = {

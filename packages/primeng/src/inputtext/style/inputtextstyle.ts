@@ -13,6 +13,12 @@ const style = /*css*/ `
     .p-inputtext.ng-invalid.ng-dirty::placeholder {
         color: dt('inputtext.invalid.placeholder.color');
     }
+
+    /* pill modifier */
+    .p-inputtext.p-inputtext-rounded,
+    .p-inputtext-rounded .p-inputtext {
+        border-radius: 9999px;
+    }
 `;
 
 const classes = {

@@ -12,6 +12,23 @@ const linkStyle = /*css*/ `
     }
 `;
 
+// secondary severity interactive states (base style paints bg/color from tokens;
+// hover/focus/active grays have no token, kept as dark literals)
+const secondaryStyle = /*css*/ `
+    .p-tag.p-tag-secondary {
+        background: dt('tag.secondary.background');
+        color: dt('tag.secondary.color');
+        transition: background-color 0.2s;
+    }
+    .p-tag.p-tag-secondary:hover,
+    .p-tag.p-tag-secondary:focus {
+        background: #575757;
+    }
+    .p-tag.p-tag-secondary:active {
+        background: #7A7A7A;
+    }
+`;
+
 const classes = {
     root: ({ instance }) => [
         'p-tag p-component',
@@ -34,7 +51,7 @@ const classes = {
 export class TagStyle extends BaseStyle {
     name = 'tag';
 
-    style = style + linkStyle;
+    style = style + linkStyle + secondaryStyle;
 
     classes = classes;
 }

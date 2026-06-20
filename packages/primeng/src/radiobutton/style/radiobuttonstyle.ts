@@ -19,6 +19,52 @@ const style = /*css*/ `
     .p-radiobutton-label:not(.p-disabled) {
         cursor: pointer;
     }
+
+    /* Label-beside-box layout (gated on label-present, mirrors Checkbox).
+       The ktt45678 fork renders <label> INSIDE the host; the styled root clamps the host
+       to control width/height, crushing the label into a vertical wrap with an oval box.
+       When a label is present (.p-radiobutton-label), make the host a real container:
+       release the clamp, keep the box circular (never shrink), float the label inline. */
+    .p-radiobutton.p-radiobutton-has-label {
+        align-items: center;
+        flex-wrap: wrap;
+        width: auto;
+        height: auto;
+    }
+
+    .p-radiobutton.p-radiobutton-has-label .p-radiobutton-box {
+        flex: 0 0 auto; /* never shrink — keeps the box circular, not an oval */
+        display: inline-flex;
+        vertical-align: middle;
+        width: dt('radiobutton.width');
+        height: dt('radiobutton.height');
+    }
+
+    .p-radiobutton-label {
+        display: inline-block; /* sit beside the box under block-display hosts */
+        vertical-align: middle;
+        margin-inline-start: 0.5rem; /* replaces flex gap so it works in block hosts too */
+        line-height: 1.25;
+        min-width: 0; /* allow the label to wrap instead of overflowing narrow rows */
+    }
+
+    /* Box-only focus: indigo border, no ring/halo.
+       focus.border.color already resolves to the indigo primary via the focus-visible
+       path in styled; remove the host state-layer halo (the Material preset css paints a
+       wide box-shadow ring sized for the 20x20 host that smears on a label-bearing row). */
+    .p-radiobutton:not(.p-disabled):has(.p-radiobutton-input:focus-visible),
+    .p-radiobutton-checked:not(.p-disabled):has(.p-radiobutton-input:focus-visible),
+    .p-radiobutton:not(.p-disabled):has(.p-radiobutton-input:hover),
+    .p-radiobutton-checked:not(.p-disabled):has(.p-radiobutton-input:hover) {
+        box-shadow: none;
+    }
+
+    .p-radiobutton:not(.p-disabled):has(.p-radiobutton-input:focus-visible) .p-radiobutton-box {
+        border-color: dt('radiobutton.focus.border.color');
+        box-shadow: none;
+        outline: 0 none;
+        outline-offset: 0;
+    }
 `;
 
 const classes = {
@@ -26,6 +72,7 @@ const classes = {
         'p-radiobutton p-component',
         {
             'p-radiobutton-checked': instance.checked,
+            'p-radiobutton-has-label': !!instance.label,
             'p-disabled': instance.$disabled(),
             'p-invalid': instance.invalid(),
             'p-variant-filled': instance.$variant() === 'filled',

@@ -9,6 +9,16 @@ ${datepicker_style}
 .p-datepicker.ng-invalid.ng-dirty .p-inputtext {
     border-color: dt('inputtext.invalid.border.color');
 }
+
+/* Input + dropdown-button group: v21 already inline-flexes and flexes the input
+   (1 1 auto / width 1%). Complete the grouping with the two robustness bits the
+   base omits: stretch the dropdown to input height, and let the input shrink. */
+.p-datepicker {
+    align-items: stretch;
+}
+.p-datepicker .p-datepicker-input {
+    min-width: 0;
+}
 `;
 
 const inlineStyles = {

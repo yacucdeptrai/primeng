@@ -37,6 +37,63 @@ const style = /*css*/ `
     @supports not (gap: 0.5rem) {
         .p-toggleswitch > * + * { margin-left: 0.5rem; }
     }
+
+    /* Full-width settings-row MODIFIER: label on the left, slider pushed to the
+       right margin. Opt-in via .p-toggleswitch--has-label on the host (set by the
+       consumer when a [label] is rendered) — the base inline-flex shrinks to
+       content, which is wrong for a settings list where each row spans the width.
+       iOS 13 lacks :has(), so this is a static marker class, not a :has() match. */
+    .p-toggleswitch--has-label {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+    .p-toggleswitch--has-label .p-toggleswitch-label {
+        flex: 1 1 auto;
+    }
+    /* iOS 13 flex-gap fallback */
+    @supports not (gap: 1rem) {
+        .p-toggleswitch--has-label > * + * { margin-left: 1rem; }
+    }
+
+    /* Slider track + knob + checked visuals from colorScheme.dark tokens.
+       v17 oracle styled .p-inputswitch-slider; v21 emits .p-toggleswitch-slider,
+       so the track/knob/checked fills were never painted. Tokens resolve to the
+       Material dark ramp (track=surface.700, knob=handle.background,
+       checked=primary.color). */
+    .p-toggleswitch .p-toggleswitch-slider {
+        background: dt('toggleswitch.background');
+        border-radius: dt('toggleswitch.border.radius');
+        width: 3rem;
+        height: 1.75rem;
+        transition: background-color 0.2s, box-shadow 0.2s;
+    }
+    .p-toggleswitch .p-toggleswitch-slider:before {
+        content: '';
+        position: absolute;
+        background: dt('toggleswitch.handle.background');
+        width: 1.25rem;
+        height: 1.25rem;
+        left: 0.25rem;
+        top: 50%;
+        margin-top: -0.625rem;
+        border-radius: dt('toggleswitch.handle.border.radius');
+        transition: transform 0.2s;
+    }
+    .p-toggleswitch:not(.p-disabled):hover .p-toggleswitch-slider {
+        background: dt('toggleswitch.hover.background');
+    }
+    .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
+        background: dt('toggleswitch.checked.background');
+    }
+    .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider:before {
+        background: dt('toggleswitch.handle.background');
+        transform: translateX(1.25rem);
+    }
+    .p-toggleswitch.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+        background: dt('toggleswitch.checked.hover.background');
+    }
 `;
 
 const inlineStyles = {

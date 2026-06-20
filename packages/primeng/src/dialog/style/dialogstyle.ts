@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/dialog';
+import { style as dialog_style } from '@primeuix/styles/dialog';
 import { BaseStyle } from 'primeng/base';
+
+const style = /*css*/ `
+    ${dialog_style}
+
+    /* compact header size variant */
+    .p-dialog-header-sm .p-dialog-header {
+        padding: 0.5rem 1.5rem;
+    }
+`;
 
 /* Position */
 const inlineStyles = {
