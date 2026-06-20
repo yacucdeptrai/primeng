@@ -5,12 +5,10 @@ import { BaseStyle } from 'primeng/base';
 const style = /*css*/ `
     ${button_style}
 
-    /* Icon glyph paints currentColor; pin icon-only/text variants to text color so glyphs stay visible on dark */
-    .p-button-icon-only:not([class*='p-button-']) .p-button-icon,
-    .p-button-icon-only.p-button-text .p-button-icon,
-    .p-button-text:not(.p-button-dark) .p-button-icon {
-        color: dt('text.color');
-    }
+    /* Button icons inherit the button's (severity-aware) color via currentColor — no icon-color
+       override here. Forcing text.color stripped the severity color from text/icon-only buttons
+       (danger delete went white, plain upload/import lost their indigo). A neutral-icon look is an
+       app concern (consumer .app-icon-btn), not a fork default. */
 
     /* Dark severity family (base / outlined / text + hover/focus/active; buttonset + splitbutton) */
     .p-button-dark,
