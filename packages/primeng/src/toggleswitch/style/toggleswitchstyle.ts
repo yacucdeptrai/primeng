@@ -8,6 +8,35 @@ const style = /*css*/ `
     p-toggleswitch.ng-invalid.ng-dirty > .p-toggleswitch-slider {
         border-color: dt('toggleswitch.invalid.border.color');
     }
+
+    /* ktt45678 [label]/[icon] support: lay icon + label + switch in one row so the
+       re-added <label> doesn't wrap or overlap the slider (v17 "container display:flex").
+       v21 sizes the switch on the root, so the slider re-asserts its own width. */
+    .p-toggleswitch {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: auto;
+        height: auto;
+        vertical-align: middle;
+    }
+    .p-toggleswitch .p-toggleswitch-slider {
+        flex: 0 0 auto;
+        position: relative;
+        width: var(--p-toggleswitch-width, 2.5rem);
+    }
+    .p-toggleswitch .p-toggleswitch-label {
+        flex: 0 1 auto;
+        line-height: 1.5;
+        cursor: pointer;
+    }
+    .p-toggleswitch.p-disabled .p-toggleswitch-label {
+        cursor: default;
+    }
+    /* iOS 13 flex-gap fallback */
+    @supports not (gap: 0.5rem) {
+        .p-toggleswitch > * + * { margin-left: 0.5rem; }
+    }
 `;
 
 const inlineStyles = {
