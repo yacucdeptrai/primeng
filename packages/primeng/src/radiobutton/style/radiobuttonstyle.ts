@@ -59,7 +59,7 @@ const style = /*css*/ `
     .p-radiobutton.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:focus-visible),
     .p-radiobutton-checked.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:hover),
     .p-radiobutton-checked.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:focus-visible) {
-        box-shadow: none;
+        box-shadow: none !important; /* beat the preset host state-layer across cascade layers */
     }
     .p-radiobutton.p-radiobutton-has-label:not(.p-disabled):has(.p-radiobutton-input:hover) .p-radiobutton-box {
         box-shadow: 0 0 1px 10px color-mix(in srgb, dt('text.color'), transparent 96%);
