@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, inject, Input, NgModule, NgZone, OnDestroy, Output, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, inject, Input, NgModule, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { addClass, getWindowScrollLeft, getWindowScrollTop, removeClass } from '@primeuix/utils';
 import { SliderAltStyle } from './style/slideraltstyle';
@@ -47,7 +47,7 @@ export const SLIDER_VALUE_ACCESSOR: any = {
         '(touchend)': 'onTouchEnd($event)'
     }
 })
-export class SliderAlt implements OnDestroy, ControlValueAccessor {
+export class SliderAlt implements OnInit, OnDestroy, ControlValueAccessor {
     @Input() animate: boolean;
 
     @Input() disabled: boolean;
@@ -118,6 +118,13 @@ export class SliderAlt implements OnDestroy, ControlValueAccessor {
         private ngZone: NgZone,
         public cd: ChangeDetectorRef
     ) {}
+
+    ngOnInit() {
+        // SliderAlt does not extend BaseComponent, so nothing triggers its style injection.
+        // Load the component style once (useStyle dedups by name across instances) so the slider
+        // skeleton renders on its own, without depending on the legacy md-dark-indigo oracle.
+        this._componentStyle.loadStyle({ name: 'slideralt-style' });
+    }
 
     onMouseDown(event, index?: number) {
         if (this.disabled) {
